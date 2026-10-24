@@ -10,118 +10,350 @@
   <style>
     body { background-color: #F6F4EE; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     .nav-active { color: #155E45; font-weight: 700; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="text-slate-800 select-none pb-24">
 
   <!-- Top Header Bar -->
-  <header class="bg-[#F6F4EE] px-4 py-3 flex items-center justify-between border-b border-stone-200 sticky top-0 z-40">
+  <header class="bg-[#F6F4EE] px-4 py-3 flex items-center justify-between border-b border-stone-200/80 sticky top-0 z-40">
     <div class="flex items-center gap-2">
-      <div class="w-8 h-8 rounded-full bg-[#155E45] flex items-center justify-center text-white text-xs font-bold">FM</div>
+      <div class="w-8 h-8 rounded-full bg-[#155E45] flex items-center justify-center text-white text-xs font-bold shadow-sm">FM</div>
       <div>
         <h1 class="font-bold text-base text-[#155E45] leading-tight">FIDROMINING</h1>
-        <p class="text-[10px] text-stone-500 uppercase tracking-wider">Cloud Hashrate</p>
+        <p class="text-[9px] text-stone-500 uppercase tracking-wider">Cloud Hashrate</p>
       </div>
     </div>
     <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full shadow-sm border border-stone-200">
       <div class="text-right">
-        <span class="text-[10px] text-stone-400 block leading-none">Your balance</span>
-        <span class="text-sm font-bold text-[#155E45]" id="header-balance">0.50 <span class="text-[10px] text-stone-500">USD</span></span>
+        <span class="text-[9px] text-stone-400 block leading-none">Your balance</span>
+        <span class="text-xs font-bold text-[#155E45]" id="header-balance">0.50 <span class="text-[9px] text-stone-500">USD</span></span>
       </div>
-      <button onclick="switchTab('wallet')" class="w-6 h-6 rounded-full bg-[#155E45] text-white flex items-center justify-center text-sm font-bold hover:opacity-90">+</button>
+      <button onclick="switchTab('wallet')" class="w-5 h-5 rounded-full bg-[#155E45] text-white flex items-center justify-center text-xs font-bold active:scale-90 transition">+</button>
     </div>
   </header>
 
   <main class="max-w-md mx-auto px-4 pt-3">
-    <!-- TAB 1: MINING PACKAGES -->
+    <!-- TAB 1: PROPERTIES / INVESTMENT CATALOG -->
     <section id="tab-properties" class="tab-page">
-      <div class="bg-gradient-to-r from-[#155E45] to-[#1F7A5B] text-white p-4 rounded-2xl mb-4 shadow-sm">
-        <span class="text-xs uppercase tracking-wider opacity-80">Cloud Infrastructure</span>
-        <h2 class="text-xl font-bold mt-1">Mining Rigs & Hashrate</h2>
-        <p class="text-xs opacity-90 mt-1">Lease computing power and earn steady daily and monthly crypto yields.</p>
+
+      <!-- Dual Mini Dashboard Header -->
+      <div class="grid grid-cols-2 gap-2 mb-3">
+        <div class="bg-white rounded-2xl p-2.5 border border-stone-200 flex items-center gap-2.5 shadow-sm">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 text-[#155E45] flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-hotel"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-stone-400 block font-medium leading-none">Properties</span>
+            <span class="text-sm font-extrabold text-stone-800" id="dash-rigs">0 <span class="text-[10px] text-stone-400 font-normal">/ 10</span></span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-2.5 border border-stone-200 flex items-center gap-2.5 shadow-sm">
+          <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-stone-400 block font-medium leading-none">Daily Accrual</span>
+            <span class="text-sm font-extrabold text-[#155E45]" id="dash-daily">0.00 <span class="text-[9px] text-stone-500">USD</span></span>
+          </div>
+        </div>
       </div>
 
-      <div class="space-y-3">
-        <!-- Rig Card 1 -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Entry Rig</span>
-              <h3 class="font-bold text-base mt-1 text-stone-800">Antminer S19 Basic</h3>
-              <p class="text-xs text-stone-500">Hashrate: 95 TH/s</p>
-            </div>
-            <div class="text-right">
-              <span class="text-xs font-bold text-[#155E45] block">+0.80 USD / day</span>
-              <span class="text-[11px] text-emerald-700 font-semibold block">+24.00 USD / mo</span>
-            </div>
+      <!-- Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-3 text-xs">
+        <button onclick="filterProperties('all')" id="pill-all" class="filter-pill bg-white px-3 py-1 rounded-full border border-stone-300 font-semibold text-stone-700 whitespace-nowrap shadow-sm">All properties</button>
+        <button onclick="filterProperties('available')" id="pill-available" class="filter-pill bg-transparent px-3 py-1 rounded-full border border-stone-300 text-stone-500 whitespace-nowrap">Available</button>
+        <button onclick="filterProperties('opened')" id="pill-opened" class="filter-pill bg-transparent px-3 py-1 rounded-full border border-stone-300 text-stone-500 whitespace-nowrap">Opened</button>
+      </div>
+
+      <!-- Properties Cards List -->
+      <div class="space-y-4" id="properties-catalog">
+
+        <!-- 1. Beach Bungalow ($0.50) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=700&auto=format&fit=crop&q=80" alt="Beach Bungalow" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-stone-100">
-            <div>
-              <span class="text-[11px] text-stone-400 block">Price</span>
-              <span class="text-base font-bold text-stone-800">10.00 USD</span>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Beach Bungalow</h3>
+            <p class="text-[11px] text-stone-400">Cozy beachfront living space</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+0.10 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">3.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
             </div>
-            <button onclick="buyRig('Antminer S19 Basic', 10.00, 0.80)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Lease Rig</button>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">0.50 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Beach Bungalow', 0.50, 0.10)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
           </div>
         </div>
 
-        <!-- Rig Card 2 -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Popular</span>
-              <h3 class="font-bold text-base mt-1 text-stone-800">WhatsMiner M50 Pro</h3>
-              <p class="text-xs text-stone-500">Hashrate: 120 TH/s</p>
-            </div>
-            <div class="text-right">
-              <span class="text-xs font-bold text-[#155E45] block">+2.50 USD / day</span>
-              <span class="text-[11px] text-emerald-700 font-semibold block">+75.00 USD / mo</span>
-            </div>
+        <!-- 2. Seaside Café ($3.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=700&auto=format&fit=crop&q=80" alt="Seaside Café" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-stone-100">
-            <div>
-              <span class="text-[11px] text-stone-400 block">Price</span>
-              <span class="text-base font-bold text-stone-800">30.00 USD</span>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Seaside Café</h3>
+            <p class="text-[11px] text-stone-400">Relaxed spot with local flavors</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+0.65 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">19.50 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
             </div>
-            <button onclick="buyRig('WhatsMiner M50 Pro', 30.00, 2.50)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Lease Rig</button>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">3.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Seaside Café', 3.00, 0.65)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
           </div>
         </div>
 
-        <!-- Rig Card 3 -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">High Performance</span>
-              <h3 class="font-bold text-base mt-1 text-stone-800">Antminer S21 Hydro</h3>
-              <p class="text-xs text-stone-500">Hashrate: 335 TH/s</p>
-            </div>
-            <div class="text-right">
-              <span class="text-xs font-bold text-[#155E45] block">+8.50 USD / day</span>
-              <span class="text-[11px] text-emerald-700 font-semibold block">+255.00 USD / mo</span>
-            </div>
+        <!-- 3. Thai Spa ($5.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=700&auto=format&fit=crop&q=80" alt="Thai Spa" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-stone-100">
-            <div>
-              <span class="text-[11px] text-stone-400 block">Price</span>
-              <span class="text-base font-bold text-stone-800">100.00 USD</span>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Thai Spa</h3>
+            <p class="text-[11px] text-stone-400">Tranquil retreat among greenery</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+1.20 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">36.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
             </div>
-            <button onclick="buyRig('Antminer S21 Hydro', 100.00, 8.50)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Lease Rig</button>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">5.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Thai Spa', 5.00, 1.20)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
           </div>
         </div>
+
+        <!-- 4. Pool Villa ($10.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=700&auto=format&fit=crop&q=80" alt="Pool Villa" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Pool Villa</h3>
+            <p class="text-[11px] text-stone-400">Privacy and breezy spaces</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+2.60 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">78.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">10.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Pool Villa', 10.00, 2.60)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Overwater Restaurant ($25.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=700&auto=format&fit=crop&q=80" alt="Overwater Restaurant" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Overwater Restaurant</h3>
+            <p class="text-[11px] text-stone-400">Dining to the sound of the ocean</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+7.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">210.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">25.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Overwater Restaurant', 25.00, 7.00)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Villa Collection ($50.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=700&auto=format&fit=crop&q=80" alt="Villa Collection" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Villa Collection</h3>
+            <p class="text-[11px] text-stone-400">Four connected accommodations</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+15.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">450.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">50.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Villa Collection', 50.00, 15.00)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Beach Club ($100.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&auto=format&fit=crop&q=80" alt="Beach Club" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Beach Club</h3>
+            <p class="text-[11px] text-stone-400">A vibrant beachfront venue</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+35.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">1,050.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">100.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Beach Club', 100.00, 35.00)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Boutique Hotel ($250.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop&q=80" alt="Boutique Hotel" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Boutique Hotel</h3>
+            <p class="text-[11px] text-stone-400">Intimate accommodations</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+100.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">3,000.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">250.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Boutique Hotel', 250.00, 100.00)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Yacht Marina ($350.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=700&auto=format&fit=crop&q=80" alt="Yacht Marina" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Yacht Marina</h3>
+            <p class="text-[11px] text-stone-400">Exquisite coastal vacations</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+175.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">5,250.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">350.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Yacht Marina', 350.00, 175.00)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- TAB 2: MY FARM -->
+    <!-- TAB 2: MY RESORT / FARM -->
     <section id="tab-myresort" class="tab-page hidden">
       <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Hardware</div>
-      <h2 class="text-2xl font-bold text-[#155E45] mb-3">My Mining Farm</h2>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">My Properties</h2>
 
-      <!-- Rig Counter -->
       <div class="bg-white rounded-2xl p-3 border border-stone-200 mb-3 shadow-sm flex items-center justify-between">
-        <span class="text-xs font-semibold text-stone-600">Active Rigs Running</span>
+        <span class="text-xs font-semibold text-stone-600">Active Units Leased</span>
         <span class="text-lg font-bold text-stone-800" id="active-rigs-count">0</span>
       </div>
 
-      <!-- Daily & Monthly Dual Cards -->
       <div class="grid grid-cols-2 gap-3 mb-4">
         <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
           <span class="text-[10px] uppercase font-bold text-stone-400 block tracking-wider">Daily Profit</span>
@@ -135,8 +367,8 @@
 
       <div id="owned-rigs-list" class="space-y-3">
         <div class="bg-white rounded-2xl p-6 border border-stone-200 text-center text-stone-400">
-          <i class="fa-solid fa-server text-3xl mb-2 text-stone-300"></i>
-          <p class="text-sm font-medium">No active mining rigs running.</p>
+          <i class="fa-solid fa-hotel text-3xl mb-2 text-stone-300"></i>
+          <p class="text-sm font-medium">No properties leased yet.</p>
           <button onclick="switchTab('properties')" class="mt-3 bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl">Browse Catalog</button>
         </div>
       </div>
@@ -185,7 +417,7 @@
     </section>
 
     <!-- TAB 4: WALLET -->
-    <section id="tab-wallet" class="tab-page">
+    <section id="tab-wallet" class="tab-page hidden">
       <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Account</div>
       <h2 class="text-2xl font-bold text-[#155E45] mb-3">Wallet</h2>
 
@@ -300,19 +532,19 @@
 
   <!-- Bottom Navigation -->
   <nav class="fixed bottom-0 left-0 right-0 bg-[#F6F4EE] border-t border-stone-200 px-4 py-2 flex justify-around items-center z-50">
-    <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center text-stone-400">
+    <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center nav-active">
       <i class="fa-solid fa-shapes text-lg mb-1"></i>
-      <span class="text-[10px]">Rigs</span>
+      <span class="text-[10px]">Properties</span>
     </button>
     <button onclick="switchTab('myresort')" id="btn-myresort" class="nav-btn flex flex-col items-center text-stone-400">
-      <i class="fa-solid fa-server text-lg mb-1"></i>
-      <span class="text-[10px]">My Farm</span>
+      <i class="fa-solid fa-hotel text-lg mb-1"></i>
+      <span class="text-[10px]">My Resort</span>
     </button>
     <button onclick="switchTab('friends')" id="btn-friends" class="nav-btn flex flex-col items-center text-stone-400">
       <i class="fa-solid fa-gift text-lg mb-1"></i>
       <span class="text-[10px]">Friends</span>
     </button>
-    <button onclick="switchTab('wallet')" id="btn-wallet" class="nav-btn flex flex-col items-center nav-active">
+    <button onclick="switchTab('wallet')" id="btn-wallet" class="nav-btn flex flex-col items-center text-stone-400">
       <i class="fa-solid fa-wallet text-lg mb-1"></i>
       <span class="text-[10px]">Wallet</span>
     </button>
@@ -344,7 +576,7 @@
 
   <script>
     let balance = 0.50;
-    let ownedRigs = [];
+    let ownedProperties = [];
 
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
@@ -377,26 +609,43 @@
       }
     }
 
-    function buyRig(name, price, dailyYield) {
+    function filterProperties(category) {
+      document.querySelectorAll('.filter-pill').forEach(btn => {
+        btn.classList.remove('bg-white', 'font-semibold', 'text-stone-700', 'shadow-sm');
+        btn.classList.add('bg-transparent', 'text-stone-500');
+      });
+      const activeBtn = document.getElementById('pill-' + category);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-transparent', 'text-stone-500');
+        activeBtn.classList.add('bg-white', 'font-semibold', 'text-stone-700', 'shadow-sm');
+      }
+    }
+
+    function buyProperty(name, price, dailyYield) {
       if (balance < price) {
-        alert("Insufficient balance! Please deposit funds to lease this hardware.");
+        alert("Insufficient balance! Please deposit funds in your wallet.");
         switchTab('wallet');
         return;
       }
       balance -= price;
-      ownedRigs.push({ name, dailyYield });
+      ownedProperties.push({ name, dailyYield });
       updateUI();
-      alert(`Success! ${name} is now actively mining.`);
+      alert(`Success! ${name} is now actively producing daily yields.`);
     }
 
     function updateUI() {
       document.getElementById('header-balance').innerText = balance.toFixed(2) + ' USD';
       document.getElementById('wallet-balance').innerHTML = balance.toFixed(2) + ' <span class="text-base font-medium">USD</span>';
-      document.getElementById('active-rigs-count').innerText = ownedRigs.length;
       
-      let totalDaily = ownedRigs.reduce((sum, r) => sum + r.dailyYield, 0);
+      let totalDaily = ownedProperties.reduce((sum, r) => sum + r.dailyYield, 0);
       let totalMonthly = totalDaily * 30;
 
+      // Update Top Mini Dashboard
+      document.getElementById('dash-rigs').innerHTML = `${ownedProperties.length} <span class="text-[10px] text-stone-400 font-normal">/ 10</span>`;
+      document.getElementById('dash-daily').innerHTML = totalDaily.toFixed(2) + ' <span class="text-[9px] text-stone-500">USD</span>';
+
+      // Update My Resort Tab
+      document.getElementById('active-rigs-count').innerText = ownedProperties.length;
       document.getElementById('daily-profit').innerHTML = totalDaily.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
       document.getElementById('monthly-profit').innerHTML = totalMonthly.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
     }
