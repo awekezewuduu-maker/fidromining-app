@@ -33,12 +33,12 @@
   </header>
 
   <main class="max-w-md mx-auto px-4 pt-3">
-    <!-- TAB 1: MINING PACKAGES (PROPERTIES) -->
+    <!-- TAB 1: MINING PACKAGES -->
     <section id="tab-properties" class="tab-page">
       <div class="bg-gradient-to-r from-[#155E45] to-[#1F7A5B] text-white p-4 rounded-2xl mb-4 shadow-sm">
         <span class="text-xs uppercase tracking-wider opacity-80">Cloud Infrastructure</span>
         <h2 class="text-xl font-bold mt-1">Mining Rigs & Hashrate</h2>
-        <p class="text-xs opacity-90 mt-1">Lease dedicated computing power and receive daily mined crypto yields directly.</p>
+        <p class="text-xs opacity-90 mt-1">Lease computing power and earn steady daily and monthly crypto yields.</p>
       </div>
 
       <div class="space-y-3">
@@ -51,8 +51,8 @@
               <p class="text-xs text-stone-500">Hashrate: 95 TH/s</p>
             </div>
             <div class="text-right">
-              <span class="text-xs text-stone-400 block">Daily Yield</span>
-              <span class="text-sm font-bold text-[#155E45]">+0.80 USD</span>
+              <span class="text-xs font-bold text-[#155E45] block">+0.80 USD / day</span>
+              <span class="text-[11px] text-emerald-700 font-semibold block">+24.00 USD / mo</span>
             </div>
           </div>
           <div class="flex items-center justify-between pt-2 border-t border-stone-100">
@@ -73,8 +73,8 @@
               <p class="text-xs text-stone-500">Hashrate: 120 TH/s</p>
             </div>
             <div class="text-right">
-              <span class="text-xs text-stone-400 block">Daily Yield</span>
-              <span class="text-sm font-bold text-[#155E45]">+2.50 USD</span>
+              <span class="text-xs font-bold text-[#155E45] block">+2.50 USD / day</span>
+              <span class="text-[11px] text-emerald-700 font-semibold block">+75.00 USD / mo</span>
             </div>
           </div>
           <div class="flex items-center justify-between pt-2 border-t border-stone-100">
@@ -95,8 +95,8 @@
               <p class="text-xs text-stone-500">Hashrate: 335 TH/s</p>
             </div>
             <div class="text-right">
-              <span class="text-xs text-stone-400 block">Daily Yield</span>
-              <span class="text-sm font-bold text-[#155E45]">+8.50 USD</span>
+              <span class="text-xs font-bold text-[#155E45] block">+8.50 USD / day</span>
+              <span class="text-[11px] text-emerald-700 font-semibold block">+255.00 USD / mo</span>
             </div>
           </div>
           <div class="flex items-center justify-between pt-2 border-t border-stone-100">
@@ -110,19 +110,26 @@
       </div>
     </section>
 
-    <!-- TAB 2: MY RESORT / ACTIVE RIGS -->
+    <!-- TAB 2: MY FARM -->
     <section id="tab-myresort" class="tab-page hidden">
       <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Hardware</div>
       <h2 class="text-2xl font-bold text-[#155E45] mb-3">My Mining Farm</h2>
 
-      <div class="bg-white rounded-2xl p-4 border border-stone-200 mb-4 shadow-sm flex items-center justify-between">
-        <div>
-          <span class="text-xs text-stone-400 block">Active Hardware</span>
-          <span class="text-2xl font-bold text-stone-800" id="active-rigs-count">0</span>
+      <!-- Rig Counter -->
+      <div class="bg-white rounded-2xl p-3 border border-stone-200 mb-3 shadow-sm flex items-center justify-between">
+        <span class="text-xs font-semibold text-stone-600">Active Rigs Running</span>
+        <span class="text-lg font-bold text-stone-800" id="active-rigs-count">0</span>
+      </div>
+
+      <!-- Daily & Monthly Dual Cards -->
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
+          <span class="text-[10px] uppercase font-bold text-stone-400 block tracking-wider">Daily Profit</span>
+          <div class="text-xl font-bold text-[#155E45] mt-1" id="daily-profit">0.00 <span class="text-xs text-stone-500">USD</span></div>
         </div>
-        <div class="text-right">
-          <span class="text-xs text-stone-400 block">Daily Accrued Profit</span>
-          <span class="text-2xl font-bold text-[#155E45]" id="total-daily-profit">0.00 <span class="text-xs text-stone-500">USD</span></span>
+        <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
+          <span class="text-[10px] uppercase font-bold text-stone-400 block tracking-wider">Monthly Profit</span>
+          <div class="text-xl font-bold text-[#155E45] mt-1" id="monthly-profit">0.00 <span class="text-xs text-stone-500">USD</span></div>
         </div>
       </div>
 
@@ -178,7 +185,7 @@
     </section>
 
     <!-- TAB 4: WALLET -->
-    <section id="tab-wallet" class="tab-page hidden">
+    <section id="tab-wallet" class="tab-page">
       <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Account</div>
       <h2 class="text-2xl font-bold text-[#155E45] mb-3">Wallet</h2>
 
@@ -195,49 +202,49 @@
       <div id="sub-deposit-list" class="space-y-2">
         <div class="text-xs font-bold text-stone-500 uppercase tracking-wider px-1">Deposit Cryptocurrencies</div>
         
+        <!-- USDT BEP20 -->
+        <div onclick="openDepositModal('USDT (BEP20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-coins"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT (BEP20)</div>
+              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+
         <!-- USDT TRC20 -->
-        <div onclick="openDepositModal('USDT (TRC20)', '10.00', 'TLqE...xyzTRC20')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+        <div onclick="openDepositModal('USDT (TRC20)', '1.00', 'TKLnq5VdEVBaGQwjGWCNLGkrMaZD27wpfx')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-t"></i></div>
             <div>
               <div class="text-xs font-bold text-stone-800">USDT (TRC20)</div>
-              <div class="text-[10px] text-stone-400">Min: 10.00 USD</div>
+              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+
+        <!-- USDT ERC20 -->
+        <div onclick="openDepositModal('USDT (ERC20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs"><i class="fa-brands fa-ethereum"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT (ERC20)</div>
+              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
             </div>
           </div>
           <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
         </div>
 
         <!-- USDT TON -->
-        <div onclick="openDepositModal('USDT (TON)', '10.00', 'EQB...xyzTON')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+        <div onclick="openDepositModal('USDT (TON)', '5.00', 'UQBA6P_n31uh6xo3HKWzKQVvkN4McRFmjY5phXFDYkAIDCJ6')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-gem"></i></div>
             <div>
               <div class="text-xs font-bold text-stone-800">USDT (TON)</div>
-              <div class="text-[10px] text-stone-400">Min: 10.00 USD</div>
-            </div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
-        </div>
-
-        <!-- TRX -->
-        <div onclick="openDepositModal('TRX (Tron)', '1.00', 'TXyZ...TRONaddress')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-cube"></i></div>
-            <div>
-              <div class="text-xs font-bold text-stone-800">TRX</div>
-              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
-            </div>
-          </div>
-          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
-        </div>
-
-        <!-- BNB BEP20 -->
-        <div onclick="openDepositModal('BNB (BEP20)', '1.00', '0x12...BNBaddress')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-coins"></i></div>
-            <div>
-              <div class="text-xs font-bold text-stone-800">BNB (BEP20)</div>
-              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
+              <div class="text-[10px] text-stone-400">Min: 5.00 USD</div>
             </div>
           </div>
           <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
@@ -250,21 +257,21 @@
           <div>
             <label class="text-xs font-semibold text-stone-500 block mb-1">Select Asset</label>
             <select class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs text-stone-800 outline-none">
+              <option>USDT (BEP20)</option>
               <option>USDT (TRC20)</option>
+              <option>USDT (ERC20)</option>
               <option>USDT (TON)</option>
-              <option>TRX</option>
-              <option>BNB (BEP20)</option>
             </select>
           </div>
           <div>
             <label class="text-xs font-semibold text-stone-500 block mb-1">Your Destination Address</label>
-            <input type="text" placeholder="Paste wallet address" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
+            <input type="text" id="withdraw-address" placeholder="Paste your wallet address" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
           </div>
           <div>
             <label class="text-xs font-semibold text-stone-500 block mb-1">Amount (USD)</label>
-            <input type="number" placeholder="Min 10.00" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
+            <input type="number" id="withdraw-amount" min="1" placeholder="Min 1.00 USD" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
           </div>
-          <button onclick="alert('Withdrawal request submitted for review!')" class="w-full bg-[#155E45] text-white py-3 rounded-xl text-xs font-bold">Request Payout</button>
+          <button onclick="submitWithdraw()" class="w-full bg-[#155E45] text-white py-3 rounded-xl text-xs font-bold active:scale-95 transition">Request Payout</button>
         </div>
       </div>
     </section>
@@ -291,9 +298,9 @@
     </section>
   </main>
 
-  <!-- Sticky Bottom Navigation Bar -->
+  <!-- Bottom Navigation -->
   <nav class="fixed bottom-0 left-0 right-0 bg-[#F6F4EE] border-t border-stone-200 px-4 py-2 flex justify-around items-center z-50">
-    <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center nav-active">
+    <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center text-stone-400">
       <i class="fa-solid fa-shapes text-lg mb-1"></i>
       <span class="text-[10px]">Rigs</span>
     </button>
@@ -305,7 +312,7 @@
       <i class="fa-solid fa-gift text-lg mb-1"></i>
       <span class="text-[10px]">Friends</span>
     </button>
-    <button onclick="switchTab('wallet')" id="btn-wallet" class="nav-btn flex flex-col items-center text-stone-400">
+    <button onclick="switchTab('wallet')" id="btn-wallet" class="nav-btn flex flex-col items-center nav-active">
       <i class="fa-solid fa-wallet text-lg mb-1"></i>
       <span class="text-[10px]">Wallet</span>
     </button>
@@ -315,15 +322,23 @@
     </button>
   </nav>
 
-  <!-- Simple Modal for Deposit Address -->
+  <!-- Deposit Modal -->
   <div id="deposit-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-3xl p-5 w-full max-w-sm text-center">
+    <div class="bg-white rounded-3xl p-5 w-full max-w-sm text-center shadow-2xl">
       <h3 class="font-bold text-base text-stone-800" id="modal-coin-title">Deposit</h3>
-      <p class="text-xs text-stone-400 mt-1">Send exact crypto to the address below:</p>
-      <div class="my-4 bg-stone-100 p-3 rounded-xl border border-stone-200">
-        <code class="text-xs font-mono break-all text-stone-700" id="modal-address">Address</code>
+      <p class="text-xs text-emerald-700 font-semibold mt-1" id="modal-min-amount">Min deposit: 1.00 USD</p>
+      <p class="text-[11px] text-stone-400 mt-0.5">Send exact crypto to the network address below:</p>
+      
+      <div class="my-3 bg-stone-50 p-3 rounded-2xl border border-stone-200">
+        <code class="text-xs font-mono break-all text-stone-800 select-all font-semibold" id="modal-address">Address</code>
       </div>
-      <button onclick="closeModal()" class="w-full bg-[#155E45] text-white py-2.5 rounded-xl text-xs font-bold">Done</button>
+
+      <div class="flex gap-2">
+        <button onclick="copyDepositAddress()" class="flex-1 bg-[#155E45] text-white py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">
+          <i class="fa-regular fa-copy mr-1"></i> Copy Address
+        </button>
+        <button onclick="closeModal()" class="flex-1 bg-stone-200 text-stone-700 py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">Close</button>
+      </div>
     </div>
   </div>
 
@@ -331,7 +346,6 @@
     let balance = 0.50;
     let ownedRigs = [];
 
-    // Telegram WebApp Auto-Init
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
@@ -379,12 +393,17 @@
       document.getElementById('header-balance').innerText = balance.toFixed(2) + ' USD';
       document.getElementById('wallet-balance').innerHTML = balance.toFixed(2) + ' <span class="text-base font-medium">USD</span>';
       document.getElementById('active-rigs-count').innerText = ownedRigs.length;
+      
       let totalDaily = ownedRigs.reduce((sum, r) => sum + r.dailyYield, 0);
-      document.getElementById('total-daily-profit').innerHTML = totalDaily.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
+      let totalMonthly = totalDaily * 30;
+
+      document.getElementById('daily-profit').innerHTML = totalDaily.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
+      document.getElementById('monthly-profit').innerHTML = totalMonthly.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
     }
 
     function openDepositModal(coin, min, addr) {
       document.getElementById('modal-coin-title').innerText = 'Deposit ' + coin;
+      document.getElementById('modal-min-amount').innerText = 'Min deposit: ' + min + ' USD';
       document.getElementById('modal-address').innerText = addr;
       document.getElementById('deposit-modal').classList.remove('hidden');
       document.getElementById('deposit-modal').classList.add('flex');
@@ -393,6 +412,36 @@
     function closeModal() {
       document.getElementById('deposit-modal').classList.add('hidden');
       document.getElementById('deposit-modal').classList.remove('flex');
+    }
+
+    function copyDepositAddress() {
+      const addr = document.getElementById('modal-address').innerText;
+      navigator.clipboard.writeText(addr);
+      alert("Deposit address copied to clipboard!");
+    }
+
+    function submitWithdraw() {
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      const addr = document.getElementById('withdraw-address').value.trim();
+
+      if (!addr) {
+        alert("Please enter your payout destination address.");
+        return;
+      }
+      if (isNaN(amount) || amount < 1.00) {
+        alert("Minimum withdrawal is 1.00 USD.");
+        return;
+      }
+      if (amount > balance) {
+        alert("Insufficient balance. Your balance is $" + balance.toFixed(2));
+        return;
+      }
+
+      balance -= amount;
+      updateUI();
+      alert("Withdrawal request of $" + amount.toFixed(2) + " submitted for review!");
+      document.getElementById('withdraw-amount').value = '';
+      document.getElementById('withdraw-address').value = '';
     }
 
     function copyRefLink() {
