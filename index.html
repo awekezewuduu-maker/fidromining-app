@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Fidromining</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body { background-color: #F6F4EE; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .nav-active { color: #155E45; font-weight: 700; }
+  </style>
+</head>
+<body class="text-slate-800 select-none pb-24">
+
+  <!-- Top Header Bar -->
+  <header class="bg-[#F6F4EE] px-4 py-3 flex items-center justify-between border-b border-stone-200 sticky top-0 z-40">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-full bg-[#155E45] flex items-center justify-center text-white text-xs font-bold">FM</div>
+      <div>
+        <h1 class="font-bold text-base text-[#155E45] leading-tight">FIDROMINING</h1>
+        <p class="text-[10px] text-stone-500 uppercase tracking-wider">Cloud Hashrate</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full shadow-sm border border-stone-200">
+      <div class="text-right">
+        <span class="text-[10px] text-stone-400 block leading-none">Your balance</span>
+        <span class="text-sm font-bold text-[#155E45]" id="header-balance">0.50 <span class="text-[10px] text-stone-500">USD</span></span>
+      </div>
+      <button onclick="switchTab('wallet')" class="w-6 h-6 rounded-full bg-[#155E45] text-white flex items-center justify-center text-sm font-bold hover:opacity-90">+</button>
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto px-4 pt-3">
+    <!-- TAB 1: MINING PACKAGES (PROPERTIES) -->
+    <section id="tab-properties" class="tab-page">
+      <div class="bg-gradient-to-r from-[#155E45] to-[#1F7A5B] text-white p-4 rounded-2xl mb-4 shadow-sm">
+        <span class="text-xs uppercase tracking-wider opacity-80">Cloud Infrastructure</span>
+        <h2 class="text-xl font-bold mt-1">Mining Rigs & Hashrate</h2>
+        <p class="text-xs opacity-90 mt-1">Lease dedicated computing power and receive daily mined crypto yields directly.</p>
+      </div>
+
+      <div class="space-y-3">
+        <!-- Rig Card 1 -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Entry Rig</span>
+              <h3 class="font-bold text-base mt-1 text-stone-800">Antminer S19 Basic</h3>
+              <p class="text-xs text-stone-500">Hashrate: 95 TH/s</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-stone-400 block">Daily Yield</span>
+              <span class="text-sm font-bold text-[#155E45]">+0.80 USD</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-stone-100">
+            <div>
+              <span class="text-[11px] text-stone-400 block">Price</span>
+              <span class="text-base font-bold text-stone-800">10.00 USD</span>
+            </div>
+            <button onclick="buyRig('Antminer S19 Basic', 10.00, 0.80)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Lease Rig</button>
+          </div>
+        </div>
+
+        <!-- Rig Card 2 -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Popular</span>
+              <h3 class="font-bold text-base mt-1 text-stone-800">WhatsMiner M50 Pro</h3>
+              <p class="text-xs text-stone-500">Hashrate: 120 TH/s</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-stone-400 block">Daily Yield</span>
+              <span class="text-sm font-bold text-[#155E45]">+2.50 USD</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-stone-100">
+            <div>
+              <span class="text-[11px] text-stone-400 block">Price</span>
+              <span class="text-base font-bold text-stone-800">30.00 USD</span>
+            </div>
+            <button onclick="buyRig('WhatsMiner M50 Pro', 30.00, 2.50)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Lease Rig</button>
+          </div>
+        </div>
+
+        <!-- Rig Card 3 -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-200">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">High Performance</span>
+              <h3 class="font-bold text-base mt-1 text-stone-800">Antminer S21 Hydro</h3>
+              <p class="text-xs text-stone-500">Hashrate: 335 TH/s</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-stone-400 block">Daily Yield</span>
+              <span class="text-sm font-bold text-[#155E45]">+8.50 USD</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-stone-100">
+            <div>
+              <span class="text-[11px] text-stone-400 block">Price</span>
+              <span class="text-base font-bold text-stone-800">100.00 USD</span>
+            </div>
+            <button onclick="buyRig('Antminer S21 Hydro', 100.00, 8.50)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Lease Rig</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: MY RESORT / ACTIVE RIGS -->
+    <section id="tab-myresort" class="tab-page hidden">
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Hardware</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">My Mining Farm</h2>
+
+      <div class="bg-white rounded-2xl p-4 border border-stone-200 mb-4 shadow-sm flex items-center justify-between">
+        <div>
+          <span class="text-xs text-stone-400 block">Active Hardware</span>
+          <span class="text-2xl font-bold text-stone-800" id="active-rigs-count">0</span>
+        </div>
+        <div class="text-right">
+          <span class="text-xs text-stone-400 block">Daily Accrued Profit</span>
+          <span class="text-2xl font-bold text-[#155E45]" id="total-daily-profit">0.00 <span class="text-xs text-stone-500">USD</span></span>
+        </div>
+      </div>
+
+      <div id="owned-rigs-list" class="space-y-3">
+        <div class="bg-white rounded-2xl p-6 border border-stone-200 text-center text-stone-400">
+          <i class="fa-solid fa-server text-3xl mb-2 text-stone-300"></i>
+          <p class="text-sm font-medium">No active mining rigs running.</p>
+          <button onclick="switchTab('properties')" class="mt-3 bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl">Browse Catalog</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: FRIENDS / REFERRAL -->
+    <section id="tab-friends" class="tab-page hidden">
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Affiliate Circle</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">Referral Program</h2>
+
+      <div class="bg-[#EAF3EE] border border-[#C5DFD2] rounded-2xl p-4 mb-4">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-full bg-[#155E45] text-white flex items-center justify-center text-lg">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <div>
+            <span class="text-2xl font-bold text-[#155E45]">15%</span>
+            <span class="text-sm font-semibold text-stone-700 block -mt-1">of friends' deposits</span>
+          </div>
+        </div>
+        <span class="inline-block bg-[#155E45] text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">+ $0.01 for every verified join</span>
+      </div>
+
+      <div class="bg-white rounded-2xl p-4 border border-stone-200 mb-4 shadow-sm">
+        <label class="text-xs font-semibold text-stone-500 block mb-2">Your Invitation Link</label>
+        <div class="flex gap-2">
+          <input id="ref-link" type="text" readonly value="https://t.me/Fidromining_bot/app?startapp=83493" class="w-full bg-stone-100 text-xs px-3 py-2.5 rounded-xl border border-stone-200 text-stone-600 outline-none" />
+          <button onclick="copyRefLink()" class="bg-[#155E45] text-white text-xs px-4 py-2.5 rounded-xl font-semibold active:scale-95 transition">Copy</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="bg-white p-3 rounded-2xl border border-stone-200 shadow-sm">
+          <span class="text-lg font-bold text-stone-800 block">0</span>
+          <span class="text-[10px] text-stone-400 font-medium uppercase">Friends</span>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-stone-200 shadow-sm">
+          <span class="text-lg font-bold text-stone-800 block">0.00</span>
+          <span class="text-[10px] text-stone-400 font-medium uppercase">Earned USD</span>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-stone-200 shadow-sm">
+          <span class="text-lg font-bold text-stone-800 block">0.00</span>
+          <span class="text-[10px] text-stone-400 font-medium uppercase">Volume USD</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: WALLET -->
+    <section id="tab-wallet" class="tab-page hidden">
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Account</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">Wallet</h2>
+
+      <div class="bg-gradient-to-br from-[#155E45] to-[#0E3E2E] text-white rounded-3xl p-5 mb-4 shadow-md">
+        <span class="text-xs text-emerald-200 block">Available Balance</span>
+        <div class="text-3xl font-extrabold mt-1 tracking-tight" id="wallet-balance">0.50 <span class="text-base font-medium">USD</span></div>
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <button onclick="showSubTab('deposit-list')" class="bg-[#F6F4EE] text-[#155E45] py-2.5 rounded-xl text-xs font-bold shadow-sm active:scale-95 transition">+ Deposit</button>
+          <button onclick="showSubTab('withdraw-form')" class="bg-emerald-900/60 border border-emerald-400/30 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm active:scale-95 transition"><i class="fa-solid fa-arrow-up text-[10px]"></i> Withdraw</button>
+        </div>
+      </div>
+
+      <!-- Deposit Sub-Page -->
+      <div id="sub-deposit-list" class="space-y-2">
+        <div class="text-xs font-bold text-stone-500 uppercase tracking-wider px-1">Deposit Cryptocurrencies</div>
+        
+        <!-- USDT TRC20 -->
+        <div onclick="openDepositModal('USDT (TRC20)', '10.00', 'TLqE...xyzTRC20')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-t"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT (TRC20)</div>
+              <div class="text-[10px] text-stone-400">Min: 10.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+
+        <!-- USDT TON -->
+        <div onclick="openDepositModal('USDT (TON)', '10.00', 'EQB...xyzTON')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-gem"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT (TON)</div>
+              <div class="text-[10px] text-stone-400">Min: 10.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+
+        <!-- TRX -->
+        <div onclick="openDepositModal('TRX (Tron)', '1.00', 'TXyZ...TRONaddress')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-cube"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">TRX</div>
+              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+
+        <!-- BNB BEP20 -->
+        <div onclick="openDepositModal('BNB (BEP20)', '1.00', '0x12...BNBaddress')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-coins"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">BNB (BEP20)</div>
+              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+      </div>
+
+      <!-- Withdraw Sub-Page -->
+      <div id="sub-withdraw-form" class="space-y-3 hidden">
+        <div class="bg-white p-4 rounded-2xl border border-stone-200 space-y-3 shadow-sm">
+          <div>
+            <label class="text-xs font-semibold text-stone-500 block mb-1">Select Asset</label>
+            <select class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs text-stone-800 outline-none">
+              <option>USDT (TRC20)</option>
+              <option>USDT (TON)</option>
+              <option>TRX</option>
+              <option>BNB (BEP20)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-stone-500 block mb-1">Your Destination Address</label>
+            <input type="text" placeholder="Paste wallet address" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-stone-500 block mb-1">Amount (USD)</label>
+            <input type="number" placeholder="Min 10.00" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
+          </div>
+          <button onclick="alert('Withdrawal request submitted for review!')" class="w-full bg-[#155E45] text-white py-3 rounded-xl text-xs font-bold">Request Payout</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: PROFILE -->
+    <section id="tab-profile" class="tab-page hidden">
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Account Info</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">Profile</h2>
+
+      <div class="bg-white rounded-2xl p-4 border border-stone-200 space-y-3 mb-4 shadow-sm">
+        <div class="flex items-center justify-between border-b border-stone-100 pb-2">
+          <span class="text-xs text-stone-400">Telegram User ID</span>
+          <span class="text-sm font-bold text-stone-800" id="user-tg-id">83493</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-stone-100 pb-2">
+          <span class="text-xs text-stone-400">Total Deposited</span>
+          <span class="text-sm font-bold text-emerald-700">0.00 USD</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-stone-400">Total Withdrawn</span>
+          <span class="text-sm font-bold text-stone-700">0.00 USD</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Sticky Bottom Navigation Bar -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-[#F6F4EE] border-t border-stone-200 px-4 py-2 flex justify-around items-center z-50">
+    <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center nav-active">
+      <i class="fa-solid fa-shapes text-lg mb-1"></i>
+      <span class="text-[10px]">Rigs</span>
+    </button>
+    <button onclick="switchTab('myresort')" id="btn-myresort" class="nav-btn flex flex-col items-center text-stone-400">
+      <i class="fa-solid fa-server text-lg mb-1"></i>
+      <span class="text-[10px]">My Farm</span>
+    </button>
+    <button onclick="switchTab('friends')" id="btn-friends" class="nav-btn flex flex-col items-center text-stone-400">
+      <i class="fa-solid fa-gift text-lg mb-1"></i>
+      <span class="text-[10px]">Friends</span>
+    </button>
+    <button onclick="switchTab('wallet')" id="btn-wallet" class="nav-btn flex flex-col items-center text-stone-400">
+      <i class="fa-solid fa-wallet text-lg mb-1"></i>
+      <span class="text-[10px]">Wallet</span>
+    </button>
+    <button onclick="switchTab('profile')" id="btn-profile" class="nav-btn flex flex-col items-center text-stone-400">
+      <i class="fa-solid fa-user text-lg mb-1"></i>
+      <span class="text-[10px]">Profile</span>
+    </button>
+  </nav>
+
+  <!-- Simple Modal for Deposit Address -->
+  <div id="deposit-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-5 w-full max-w-sm text-center">
+      <h3 class="font-bold text-base text-stone-800" id="modal-coin-title">Deposit</h3>
+      <p class="text-xs text-stone-400 mt-1">Send exact crypto to the address below:</p>
+      <div class="my-4 bg-stone-100 p-3 rounded-xl border border-stone-200">
+        <code class="text-xs font-mono break-all text-stone-700" id="modal-address">Address</code>
+      </div>
+      <button onclick="closeModal()" class="w-full bg-[#155E45] text-white py-2.5 rounded-xl text-xs font-bold">Done</button>
+    </div>
+  </div>
+
+  <script>
+    let balance = 0.50;
+    let ownedRigs = [];
+
+    // Telegram WebApp Auto-Init
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+      const user = window.Telegram.WebApp.initDataUnsafe?.user;
+      if (user) {
+        document.getElementById('user-tg-id').innerText = user.id;
+        document.getElementById('ref-link').value = `https://t.me/Fidromining_bot/app?startapp=${user.id}`;
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(el => {
+        el.classList.remove('nav-active');
+        el.classList.add('text-stone-400');
+      });
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      document.getElementById('btn-' + tabId).classList.add('nav-active');
+      document.getElementById('btn-' + tabId).classList.remove('text-stone-400');
+    }
+
+    function showSubTab(type) {
+      if(type === 'deposit-list') {
+        document.getElementById('sub-deposit-list').classList.remove('hidden');
+        document.getElementById('sub-withdraw-form').classList.add('hidden');
+      } else {
+        document.getElementById('sub-deposit-list').classList.add('hidden');
+        document.getElementById('sub-withdraw-form').classList.remove('hidden');
+      }
+    }
+
+    function buyRig(name, price, dailyYield) {
+      if (balance < price) {
+        alert("Insufficient balance! Please deposit funds to lease this hardware.");
+        switchTab('wallet');
+        return;
+      }
+      balance -= price;
+      ownedRigs.push({ name, dailyYield });
+      updateUI();
+      alert(`Success! ${name} is now actively mining.`);
+    }
+
+    function updateUI() {
+      document.getElementById('header-balance').innerText = balance.toFixed(2) + ' USD';
+      document.getElementById('wallet-balance').innerHTML = balance.toFixed(2) + ' <span class="text-base font-medium">USD</span>';
+      document.getElementById('active-rigs-count').innerText = ownedRigs.length;
+      let totalDaily = ownedRigs.reduce((sum, r) => sum + r.dailyYield, 0);
+      document.getElementById('total-daily-profit').innerHTML = totalDaily.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
+    }
+
+    function openDepositModal(coin, min, addr) {
+      document.getElementById('modal-coin-title').innerText = 'Deposit ' + coin;
+      document.getElementById('modal-address').innerText = addr;
+      document.getElementById('deposit-modal').classList.remove('hidden');
+      document.getElementById('deposit-modal').classList.add('flex');
+    }
+
+    function closeModal() {
+      document.getElementById('deposit-modal').classList.add('hidden');
+      document.getElementById('deposit-modal').classList.remove('flex');
+    }
+
+    function copyRefLink() {
+      const link = document.getElementById('ref-link');
+      link.select();
+      navigator.clipboard.writeText(link.value);
+      alert("Referral link copied!");
+    }
+  </script>
+</body>
+</html>
