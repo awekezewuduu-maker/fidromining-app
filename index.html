@@ -35,10 +35,8 @@
   </header>
 
   <main class="max-w-md mx-auto px-4 pt-3">
-    <!-- TAB 1: PROPERTIES / INVESTMENT CATALOG -->
+    <!-- TAB 1: PROPERTIES CATALOG -->
     <section id="tab-properties" class="tab-page">
-
-      <!-- Dual Mini Dashboard Header -->
       <div class="grid grid-cols-2 gap-2 mb-3">
         <div class="bg-white rounded-2xl p-2.5 border border-stone-200 flex items-center gap-2.5 shadow-sm">
           <div class="w-8 h-8 rounded-xl bg-emerald-50 text-[#155E45] flex items-center justify-center text-sm font-bold">
@@ -61,22 +59,13 @@
         </div>
       </div>
 
-      <!-- Filter Pills -->
-      <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-3 text-xs">
-        <button onclick="filterProperties('all')" id="pill-all" class="filter-pill bg-white px-3 py-1 rounded-full border border-stone-300 font-semibold text-stone-700 whitespace-nowrap shadow-sm">All properties</button>
-        <button onclick="filterProperties('available')" id="pill-available" class="filter-pill bg-transparent px-3 py-1 rounded-full border border-stone-300 text-stone-500 whitespace-nowrap">Available</button>
-        <button onclick="filterProperties('opened')" id="pill-opened" class="filter-pill bg-transparent px-3 py-1 rounded-full border border-stone-300 text-stone-500 whitespace-nowrap">Opened</button>
-      </div>
-
       <!-- Properties Cards List -->
       <div class="space-y-4" id="properties-catalog">
-
         <!-- 1. Beach Bungalow ($0.50) -->
         <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=700&auto=format&fit=crop&q=80" alt="Beach Bungalow" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Beach Bungalow</h3>
@@ -106,7 +95,6 @@
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=700&auto=format&fit=crop&q=80" alt="Seaside Café" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Seaside Café</h3>
@@ -136,7 +124,6 @@
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=700&auto=format&fit=crop&q=80" alt="Thai Spa" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Thai Spa</h3>
@@ -166,7 +153,6 @@
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=700&auto=format&fit=crop&q=80" alt="Pool Villa" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Pool Villa</h3>
@@ -196,7 +182,6 @@
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=700&auto=format&fit=crop&q=80" alt="Overwater Restaurant" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Overwater Restaurant</h3>
@@ -226,7 +211,6 @@
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=700&auto=format&fit=crop&q=80" alt="Villa Collection" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Villa Collection</h3>
@@ -256,7 +240,6 @@
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&auto=format&fit=crop&q=80" alt="Beach Club" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Beach Club</h3>
@@ -286,7 +269,6 @@
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop&q=80" alt="Boutique Hotel" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Boutique Hotel</h3>
@@ -316,7 +298,6 @@
           <div class="relative h-44 bg-stone-100 overflow-hidden">
             <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=700&auto=format&fit=crop&q=80" alt="Yacht Marina" class="w-full h-full object-cover">
             <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
-            <span class="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center text-stone-500 text-xs"><i class="fa-regular fa-heart text-[10px]"></i></span>
           </div>
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Yacht Marina</h3>
@@ -340,11 +321,10 @@
             </div>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- TAB 2: MY RESORT / FARM -->
+    <!-- TAB 2: MY RESORT -->
     <section id="tab-myresort" class="tab-page hidden">
       <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Hardware</div>
       <h2 class="text-2xl font-bold text-[#155E45] mb-3">My Properties</h2>
@@ -374,44 +354,15 @@
       </div>
     </section>
 
-    <!-- TAB 3: FRIENDS / REFERRAL -->
+    <!-- TAB 3: FRIENDS -->
     <section id="tab-friends" class="tab-page hidden">
       <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Affiliate Circle</div>
       <h2 class="text-2xl font-bold text-[#155E45] mb-3">Referral Program</h2>
-
-      <div class="bg-[#EAF3EE] border border-[#C5DFD2] rounded-2xl p-4 mb-4">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-10 h-10 rounded-full bg-[#155E45] text-white flex items-center justify-center text-lg">
-            <i class="fa-solid fa-gift"></i>
-          </div>
-          <div>
-            <span class="text-2xl font-bold text-[#155E45]">15%</span>
-            <span class="text-sm font-semibold text-stone-700 block -mt-1">of friends' deposits</span>
-          </div>
-        </div>
-        <span class="inline-block bg-[#155E45] text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">+ $0.01 for every verified join</span>
-      </div>
-
       <div class="bg-white rounded-2xl p-4 border border-stone-200 mb-4 shadow-sm">
         <label class="text-xs font-semibold text-stone-500 block mb-2">Your Invitation Link</label>
         <div class="flex gap-2">
           <input id="ref-link" type="text" readonly value="https://t.me/Fidromining_bot/app?startapp=83493" class="w-full bg-stone-100 text-xs px-3 py-2.5 rounded-xl border border-stone-200 text-stone-600 outline-none" />
           <button onclick="copyRefLink()" class="bg-[#155E45] text-white text-xs px-4 py-2.5 rounded-xl font-semibold active:scale-95 transition">Copy</button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-3 gap-2 text-center">
-        <div class="bg-white p-3 rounded-2xl border border-stone-200 shadow-sm">
-          <span class="text-lg font-bold text-stone-800 block">0</span>
-          <span class="text-[10px] text-stone-400 font-medium uppercase">Friends</span>
-        </div>
-        <div class="bg-white p-3 rounded-2xl border border-stone-200 shadow-sm">
-          <span class="text-lg font-bold text-stone-800 block">0.00</span>
-          <span class="text-[10px] text-stone-400 font-medium uppercase">Earned USD</span>
-        </div>
-        <div class="bg-white p-3 rounded-2xl border border-stone-200 shadow-sm">
-          <span class="text-lg font-bold text-stone-800 block">0.00</span>
-          <span class="text-[10px] text-stone-400 font-medium uppercase">Volume USD</span>
         </div>
       </div>
     </section>
@@ -434,7 +385,6 @@
       <div id="sub-deposit-list" class="space-y-2">
         <div class="text-xs font-bold text-stone-500 uppercase tracking-wider px-1">Deposit Cryptocurrencies</div>
         
-        <!-- USDT BEP20 -->
         <div onclick="openDepositModal('USDT (BEP20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-coins"></i></div>
@@ -446,7 +396,6 @@
           <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
         </div>
 
-        <!-- USDT TRC20 -->
         <div onclick="openDepositModal('USDT (TRC20)', '1.00', 'TKLnq5VdEVBaGQwjGWCNLGkrMaZD27wpfx')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-t"></i></div>
@@ -458,7 +407,6 @@
           <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
         </div>
 
-        <!-- USDT ERC20 -->
         <div onclick="openDepositModal('USDT (ERC20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs"><i class="fa-brands fa-ethereum"></i></div>
@@ -470,7 +418,6 @@
           <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
         </div>
 
-        <!-- USDT TON -->
         <div onclick="openDepositModal('USDT (TON)', '5.00', 'UQBA6P_n31uh6xo3HKWzKQVvkN4McRFmjY5phXFDYkAIDCJ6')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-gem"></i></div>
@@ -488,11 +435,11 @@
         <div class="bg-white p-4 rounded-2xl border border-stone-200 space-y-3 shadow-sm">
           <div>
             <label class="text-xs font-semibold text-stone-500 block mb-1">Select Asset</label>
-            <select class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs text-stone-800 outline-none">
-              <option>USDT (BEP20)</option>
-              <option>USDT (TRC20)</option>
-              <option>USDT (ERC20)</option>
-              <option>USDT (TON)</option>
+            <select id="withdraw-asset" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs text-stone-800 outline-none">
+              <option value="USDT (BEP20)">USDT (BEP20)</option>
+              <option value="USDT (TRC20)">USDT (TRC20)</option>
+              <option value="USDT (ERC20)">USDT (ERC20)</option>
+              <option value="USDT (TON)">USDT (TON)</option>
             </select>
           </div>
           <div>
@@ -503,7 +450,7 @@
             <label class="text-xs font-semibold text-stone-500 block mb-1">Amount (USD)</label>
             <input type="number" id="withdraw-amount" min="1" placeholder="Min 1.00 USD" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
           </div>
-          <button onclick="submitWithdraw()" class="w-full bg-[#155E45] text-white py-3 rounded-xl text-xs font-bold active:scale-95 transition">Request Payout</button>
+          <button onclick="submitWithdraw()" id="btn-submit-withdraw" class="w-full bg-[#155E45] text-white py-3 rounded-xl text-xs font-bold active:scale-95 transition">Request Payout</button>
         </div>
       </div>
     </section>
@@ -512,19 +459,10 @@
     <section id="tab-profile" class="tab-page hidden">
       <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Account Info</div>
       <h2 class="text-2xl font-bold text-[#155E45] mb-3">Profile</h2>
-
       <div class="bg-white rounded-2xl p-4 border border-stone-200 space-y-3 mb-4 shadow-sm">
         <div class="flex items-center justify-between border-b border-stone-100 pb-2">
           <span class="text-xs text-stone-400">Telegram User ID</span>
           <span class="text-sm font-bold text-stone-800" id="user-tg-id">83493</span>
-        </div>
-        <div class="flex items-center justify-between border-b border-stone-100 pb-2">
-          <span class="text-xs text-stone-400">Total Deposited</span>
-          <span class="text-sm font-bold text-emerald-700">0.00 USD</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-xs text-stone-400">Total Withdrawn</span>
-          <span class="text-sm font-bold text-stone-700">0.00 USD</span>
         </div>
       </div>
     </section>
@@ -554,35 +492,55 @@
     </button>
   </nav>
 
-  <!-- Deposit Modal -->
+  <!-- Deposit Modal with TXID Submission -->
   <div id="deposit-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
     <div class="bg-white rounded-3xl p-5 w-full max-w-sm text-center shadow-2xl">
       <h3 class="font-bold text-base text-stone-800" id="modal-coin-title">Deposit</h3>
       <p class="text-xs text-emerald-700 font-semibold mt-1" id="modal-min-amount">Min deposit: 1.00 USD</p>
-      <p class="text-[11px] text-stone-400 mt-0.5">Send exact crypto to the network address below:</p>
       
-      <div class="my-3 bg-stone-50 p-3 rounded-2xl border border-stone-200">
-        <code class="text-xs font-mono break-all text-stone-800 select-all font-semibold" id="modal-address">Address</code>
-      </div>
-
-      <div class="flex gap-2">
-        <button onclick="copyDepositAddress()" class="flex-1 bg-[#155E45] text-white py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">
+      <!-- Address Box -->
+      <div class="my-3 bg-stone-50 p-3 rounded-2xl border border-stone-200 text-left">
+        <span class="text-[10px] text-stone-400 font-bold block mb-1 uppercase">Official Deposit Address</span>
+        <code class="text-xs font-mono break-all text-stone-800 select-all font-semibold block" id="modal-address">Address</code>
+        <button onclick="copyDepositAddress()" class="mt-2 w-full bg-[#155E45] text-white py-1.5 rounded-lg text-xs font-semibold active:scale-95 transition">
           <i class="fa-regular fa-copy mr-1"></i> Copy Address
         </button>
-        <button onclick="closeModal()" class="flex-1 bg-stone-200 text-stone-700 py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">Close</button>
       </div>
+
+      <!-- Proof of Payment / TXID Input -->
+      <div class="text-left space-y-2 mt-4 pt-3 border-t border-stone-100">
+        <label class="text-[11px] font-bold text-stone-600 block">Submit Proof After Transfer:</label>
+        <input type="number" id="deposit-tx-amount" placeholder="Amount sent in USD" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2 text-xs outline-none" />
+        <input type="text" id="deposit-txid" placeholder="Transaction Hash / TXID" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2 text-xs outline-none" />
+        
+        <button onclick="submitDepositProof()" id="btn-submit-proof" class="w-full bg-[#155E45] text-white py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">
+          Confirm Deposit
+        </button>
+      </div>
+
+      <button onclick="closeModal()" class="mt-2 text-xs text-stone-400 font-semibold hover:text-stone-600">Close Window</button>
     </div>
   </div>
 
   <script>
+    // Configuration
+    const BOT_TOKEN = '8151817551:AAFF9iL410tqI54Y9F3v8u9rWq2Z5fQ6z4Y';
+    const ADMIN_TELEGRAM_ID = '8181751673'; // Connected to @Biilget
+
     let balance = 0.50;
     let ownedProperties = [];
+    let currentCoin = '';
+    let currentMin = 1.00;
+    let currentUserId = '83493';
+    let currentUserHandle = 'Unknown';
 
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
       const user = window.Telegram.WebApp.initDataUnsafe?.user;
       if (user) {
+        currentUserId = user.id;
+        currentUserHandle = user.username ? '@' + user.username : (user.first_name || 'User');
         document.getElementById('user-tg-id').innerText = user.id;
         document.getElementById('ref-link').value = `https://t.me/Fidromining_bot/app?startapp=${user.id}`;
       }
@@ -609,18 +567,6 @@
       }
     }
 
-    function filterProperties(category) {
-      document.querySelectorAll('.filter-pill').forEach(btn => {
-        btn.classList.remove('bg-white', 'font-semibold', 'text-stone-700', 'shadow-sm');
-        btn.classList.add('bg-transparent', 'text-stone-500');
-      });
-      const activeBtn = document.getElementById('pill-' + category);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-transparent', 'text-stone-500');
-        activeBtn.classList.add('bg-white', 'font-semibold', 'text-stone-700', 'shadow-sm');
-      }
-    }
-
     function buyProperty(name, price, dailyYield) {
       if (balance < price) {
         alert("Insufficient balance! Please deposit funds in your wallet.");
@@ -640,20 +586,22 @@
       let totalDaily = ownedProperties.reduce((sum, r) => sum + r.dailyYield, 0);
       let totalMonthly = totalDaily * 30;
 
-      // Update Top Mini Dashboard
       document.getElementById('dash-rigs').innerHTML = `${ownedProperties.length} <span class="text-[10px] text-stone-400 font-normal">/ 10</span>`;
       document.getElementById('dash-daily').innerHTML = totalDaily.toFixed(2) + ' <span class="text-[9px] text-stone-500">USD</span>';
 
-      // Update My Resort Tab
       document.getElementById('active-rigs-count').innerText = ownedProperties.length;
       document.getElementById('daily-profit').innerHTML = totalDaily.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
       document.getElementById('monthly-profit').innerHTML = totalMonthly.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
     }
 
     function openDepositModal(coin, min, addr) {
+      currentCoin = coin;
+      currentMin = parseFloat(min);
       document.getElementById('modal-coin-title').innerText = 'Deposit ' + coin;
       document.getElementById('modal-min-amount').innerText = 'Min deposit: ' + min + ' USD';
       document.getElementById('modal-address').innerText = addr;
+      document.getElementById('deposit-tx-amount').value = '';
+      document.getElementById('deposit-txid').value = '';
       document.getElementById('deposit-modal').classList.remove('hidden');
       document.getElementById('deposit-modal').classList.add('flex');
     }
@@ -666,15 +614,59 @@
     function copyDepositAddress() {
       const addr = document.getElementById('modal-address').innerText;
       navigator.clipboard.writeText(addr);
-      alert("Deposit address copied to clipboard!");
+      alert("Deposit address copied!");
+    }
+
+    function submitDepositProof() {
+      const amount = parseFloat(document.getElementById('deposit-tx-amount').value);
+      const txid = document.getElementById('deposit-txid').value.trim();
+
+      if (isNaN(amount) || amount < currentMin) {
+        alert(`Minimum deposit is ${currentMin} USD.`);
+        return;
+      }
+      if (!txid) {
+        alert("Please paste your transaction hash/TXID.");
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit-proof');
+      btn.innerText = "Submitting...";
+      btn.disabled = true;
+
+      const msg = `🔔 *NEW DEPOSIT SUBMISSION*\n\n👤 *User:* ${currentUserHandle} (\`${currentUserId}\`)\n💰 *Asset:* ${currentCoin}\n💵 *Amount:* $${amount.toFixed(2)} USD\n🔗 *TXID:*\n\`${txid}\``;
+      
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: ADMIN_TELEGRAM_ID,
+          text: msg,
+          parse_mode: 'Markdown'
+        })
+      })
+      .then(res => res.json())
+      .then(() => {
+        alert("Deposit submitted! Balance will be credited after confirmation.");
+        closeModal();
+      })
+      .catch(() => {
+        alert("Submitted! We will verify your transaction shortly.");
+        closeModal();
+      })
+      .finally(() => {
+        btn.innerText = "Confirm Deposit";
+        btn.disabled = false;
+      });
     }
 
     function submitWithdraw() {
       const amount = parseFloat(document.getElementById('withdraw-amount').value);
       const addr = document.getElementById('withdraw-address').value.trim();
+      const asset = document.getElementById('withdraw-asset').value;
 
       if (!addr) {
-        alert("Please enter your payout destination address.");
+        alert("Please enter payout address.");
         return;
       }
       if (isNaN(amount) || amount < 1.00) {
@@ -682,15 +674,42 @@
         return;
       }
       if (amount > balance) {
-        alert("Insufficient balance. Your balance is $" + balance.toFixed(2));
+        alert("Insufficient balance.");
         return;
       }
 
-      balance -= amount;
-      updateUI();
-      alert("Withdrawal request of $" + amount.toFixed(2) + " submitted for review!");
-      document.getElementById('withdraw-amount').value = '';
-      document.getElementById('withdraw-address').value = '';
+      const btn = document.getElementById('btn-submit-withdraw');
+      btn.innerText = "Processing...";
+      btn.disabled = true;
+
+      const msg = `🚨 *NEW WITHDRAWAL REQUEST*\n\n👤 *User:* ${currentUserHandle} (\`${currentUserId}\`)\n💰 *Asset:* ${asset}\n💵 *Amount:* $${amount.toFixed(2)} USD\n📍 *Destination Address:*\n\`${addr}\``;
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: ADMIN_TELEGRAM_ID,
+          text: msg,
+          parse_mode: 'Markdown'
+        })
+      })
+      .then(res => res.json())
+      .then(() => {
+        balance -= amount;
+        updateUI();
+        alert("Withdrawal request submitted! We will send your funds shortly.");
+        document.getElementById('withdraw-amount').value = '';
+        document.getElementById('withdraw-address').value = '';
+      })
+      .catch(() => {
+        balance -= amount;
+        updateUI();
+        alert("Withdrawal request submitted! Payout will be processed shortly.");
+      })
+      .finally(() => {
+        btn.innerText = "Request Payout";
+        btn.disabled = false;
+      });
     }
 
     function copyRefLink() {
