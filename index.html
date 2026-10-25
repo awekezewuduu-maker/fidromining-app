@@ -10,118 +10,485 @@
   <style>
     body { background-color: #F6F4EE; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     .nav-active { color: #155E45; font-weight: 700; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="text-slate-800 select-none pb-24">
 
-  <!-- Header -->
-  <header class="bg-[#F6F4EE] px-4 py-3 flex items-center justify-between border-b border-stone-200 sticky top-0 z-40">
+  <!-- Top Header Bar -->
+  <header class="bg-[#F6F4EE] px-4 py-3 flex items-center justify-between border-b border-stone-200/80 sticky top-0 z-40">
     <div class="flex items-center gap-2">
-      <div class="w-8 h-8 rounded-full bg-[#155E45] flex items-center justify-center text-white text-xs font-bold">FM</div>
+      <div class="w-8 h-8 rounded-full bg-[#155E45] flex items-center justify-center text-white text-xs font-bold shadow-sm">FM</div>
       <div>
         <h1 class="font-bold text-base text-[#155E45] leading-tight">FIDROMINING</h1>
-        <p class="text-[9px] text-stone-500 uppercase">Cloud Hashrate</p>
+        <p class="text-[9px] text-stone-500 uppercase tracking-wider">Cloud Hashrate</p>
       </div>
     </div>
-    <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-stone-200">
-      <span class="text-xs font-bold text-[#155E45]" id="header-balance">0.50 USD</span>
+    <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full shadow-sm border border-stone-200">
+      <div class="text-right">
+        <span class="text-[9px] text-stone-400 block leading-none">Your balance</span>
+        <span class="text-xs font-bold text-[#155E45]" id="header-balance">0.50 <span class="text-[9px] text-stone-500">USD</span></span>
+      </div>
+      <button onclick="switchTab('wallet')" class="w-5 h-5 rounded-full bg-[#155E45] text-white flex items-center justify-center text-xs font-bold active:scale-90 transition">+</button>
     </div>
   </header>
 
   <main class="max-w-md mx-auto px-4 pt-3">
-    <div id="status-banner" class="hidden mb-3 p-3 rounded-2xl text-xs font-semibold text-center border"></div>
+    <!-- Status Banner for User -->
+    <div id="status-banner" class="hidden mb-3 p-3 rounded-2xl text-xs font-semibold text-center border shadow-sm"></div>
 
-    <!-- Properties -->
+    <!-- TAB 1: PROPERTIES CATALOG -->
     <section id="tab-properties" class="tab-page">
-      <div class="space-y-4">
-        <div class="bg-white rounded-3xl p-4 border border-stone-200 shadow-sm">
-          <h3 class="font-bold text-base text-stone-800">Beach Bungalow</h3>
-          <p class="text-xs text-stone-400">Daily yield: +$0.10 USD</p>
-          <div class="flex justify-between items-center mt-3">
-            <span class="font-bold text-stone-800">$0.50 USD</span>
-            <button onclick="alert('Leased!')" class="bg-[#155E45] text-white text-xs px-4 py-2 rounded-xl font-bold">Open Property</button>
+      <div class="grid grid-cols-2 gap-2 mb-3">
+        <div class="bg-white rounded-2xl p-2.5 border border-stone-200 flex items-center gap-2.5 shadow-sm">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 text-[#155E45] flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-hotel"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-stone-400 block font-medium leading-none">Properties</span>
+            <span class="text-sm font-extrabold text-stone-800" id="dash-rigs">0 <span class="text-[10px] text-stone-400 font-normal">/ 10</span></span>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-2.5 border border-stone-200 flex items-center gap-2.5 shadow-sm">
+          <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div>
+            <span class="text-[10px] text-stone-400 block font-medium leading-none">Daily Accrual</span>
+            <span class="text-sm font-extrabold text-[#155E45]" id="dash-daily">0.00 <span class="text-[9px] text-stone-500">USD</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Properties Cards List -->
+      <div class="space-y-4" id="properties-catalog">
+        <!-- 1. Beach Bungalow ($0.50) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=700&auto=format&fit=crop&q=80" alt="Beach Bungalow" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Beach Bungalow</h3>
+            <p class="text-[11px] text-stone-400">Cozy beachfront living space</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+0.10 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">3.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">0.50 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Beach Bungalow', 0.50, 0.10)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Seaside Café ($3.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=700&auto=format&fit=crop&q=80" alt="Seaside Café" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Seaside Café</h3>
+            <p class="text-[11px] text-stone-400">Relaxed spot with local flavors</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+0.65 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">19.50 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">3.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Seaside Café', 3.00, 0.65)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Thai Spa ($5.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=700&auto=format&fit=crop&q=80" alt="Thai Spa" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Thai Spa</h3>
+            <p class="text-[11px] text-stone-400">Tranquil retreat among greenery</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+1.20 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">36.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">5.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Thai Spa', 5.00, 1.20)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Pool Villa ($10.00) -->
+        <div class="property-card bg-white rounded-3xl overflow-hidden border border-stone-200 shadow-sm">
+          <div class="relative h-44 bg-stone-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=700&auto=format&fit=crop&q=80" alt="Pool Villa" class="w-full h-full object-cover">
+            <span class="absolute top-3 left-3 bg-white/95 text-[10px] font-bold text-stone-700 px-2.5 py-0.5 rounded-full shadow-sm">Available</span>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-base text-stone-800">Pool Villa</h3>
+            <p class="text-[11px] text-stone-400">Privacy and breezy spaces</p>
+            <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block font-medium">Daily income</span>
+                <span class="text-sm font-extrabold text-[#155E45]">+2.60 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-stone-400 block font-medium">In 30 days</span>
+                <span class="text-sm font-extrabold text-stone-700">78.00 <span class="text-[10px] text-stone-400">USD</span></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-stone-100">
+              <div>
+                <span class="text-[10px] text-stone-400 block">Price</span>
+                <span class="text-base font-bold text-stone-800">10.00 <span class="text-xs text-stone-500 font-normal">USD</span></span>
+              </div>
+              <button onclick="buyProperty('Pool Villa', 10.00, 2.60)" class="bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl active:scale-95 transition">Open property</button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Wallet -->
-    <section id="tab-wallet" class="tab-page hidden">
-      <div class="bg-gradient-to-br from-[#155E45] to-[#0E3E2E] text-white rounded-3xl p-5 mb-4">
-        <span class="text-xs text-emerald-200 block">Available Balance</span>
-        <div class="text-3xl font-extrabold mt-1" id="wallet-balance">0.50 USD</div>
+    <!-- TAB 2: MY RESORT -->
+    <section id="tab-myresort" class="tab-page hidden">
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Hardware</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">My Properties</h2>
+
+      <div class="bg-white rounded-2xl p-3 border border-stone-200 mb-3 shadow-sm flex items-center justify-between">
+        <span class="text-xs font-semibold text-stone-600">Active Units Leased</span>
+        <span class="text-lg font-bold text-stone-800" id="active-rigs-count">0</span>
       </div>
 
-      <div class="space-y-2">
-        <div onclick="openModal('USDT BEP20', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-white p-3 rounded-2xl border border-stone-200 flex justify-between items-center cursor-pointer">
-          <div class="text-xs font-bold">USDT (BEP20)</div>
-          <span class="text-xs text-stone-400">Deposit &rarr;</span>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
+          <span class="text-[10px] uppercase font-bold text-stone-400 block tracking-wider">Daily Profit</span>
+          <div class="text-xl font-bold text-[#155E45] mt-1" id="daily-profit">0.00 <span class="text-xs text-stone-500">USD</span></div>
         </div>
-        <div onclick="openModal('USDT TRC20', '1.00', 'TKLnq5VdEVBaGQwjGWCNLGkrMaZD27wpfx')" class="bg-white p-3 rounded-2xl border border-stone-200 flex justify-between items-center cursor-pointer">
-          <div class="text-xs font-bold">USDT (TRC20)</div>
-          <span class="text-xs text-stone-400">Deposit &rarr;</span>
+        <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
+          <span class="text-[10px] uppercase font-bold text-stone-400 block tracking-wider">Monthly Profit</span>
+          <div class="text-xl font-bold text-[#155E45] mt-1" id="monthly-profit">0.00 <span class="text-xs text-stone-500">USD</span></div>
+        </div>
+      </div>
+
+      <div id="owned-rigs-list" class="space-y-3">
+        <div class="bg-white rounded-2xl p-6 border border-stone-200 text-center text-stone-400">
+          <i class="fa-solid fa-hotel text-3xl mb-2 text-stone-300"></i>
+          <p class="text-sm font-medium">No properties leased yet.</p>
+          <button onclick="switchTab('properties')" class="mt-3 bg-[#155E45] text-white text-xs font-semibold px-4 py-2 rounded-xl">Browse Catalog</button>
         </div>
       </div>
     </section>
 
-    <!-- Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-[#F6F4EE] border-t border-stone-200 px-4 py-3 flex justify-around">
-      <button onclick="switchTab('properties')" class="text-xs font-bold">Properties</button>
-      <button onclick="switchTab('wallet')" class="text-xs font-bold text-[#155E45]">Wallet</button>
-    </nav>
+    <!-- TAB 3: FRIENDS -->
+    <section id="tab-friends" class="tab-page hidden">
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Affiliate Circle</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">Referral Program</h2>
+      <div class="bg-white rounded-2xl p-4 border border-stone-200 mb-4 shadow-sm">
+        <label class="text-xs font-semibold text-stone-500 block mb-2">Your Invitation Link</label>
+        <div class="flex gap-2">
+          <input id="ref-link" type="text" readonly value="https://t.me/Fidromining_bot/app?startapp=8181751673" class="w-full bg-stone-100 text-xs px-3 py-2.5 rounded-xl border border-stone-200 text-stone-600 outline-none" />
+          <button onclick="copyRefLink()" class="bg-[#155E45] text-white text-xs px-4 py-2.5 rounded-xl font-semibold active:scale-95 transition">Copy</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: WALLET -->
+    <section id="tab-wallet" class="tab-page hidden">
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Your Account</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">Wallet</h2>
+
+      <div class="bg-gradient-to-br from-[#155E45] to-[#0E3E2E] text-white rounded-3xl p-5 mb-4 shadow-md">
+        <span class="text-xs text-emerald-200 block">Available Balance</span>
+        <div class="text-3xl font-extrabold mt-1 tracking-tight" id="wallet-balance">0.50 <span class="text-base font-medium">USD</span></div>
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <button onclick="showSubTab('deposit-list')" class="bg-[#F6F4EE] text-[#155E45] py-2.5 rounded-xl text-xs font-bold shadow-sm active:scale-95 transition">+ Deposit</button>
+          <button onclick="showSubTab('withdraw-form')" class="bg-emerald-900/60 border border-emerald-400/30 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm active:scale-95 transition"><i class="fa-solid fa-arrow-up text-[10px]"></i> Withdraw</button>
+        </div>
+      </div>
+
+      <!-- Deposit Sub-Page -->
+      <div id="sub-deposit-list" class="space-y-2">
+        <div class="text-xs font-bold text-stone-500 uppercase tracking-wider px-1">Deposit Cryptocurrencies</div>
+        
+        <div onclick="openDepositModal('USDT (BEP20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-coins"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT (BEP20)</div>
+              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+
+        <div onclick="openDepositModal('USDT (TRC20)', '1.00', 'TKLnq5VdEVBaGQwjGWCNLGkrMaZD27wpfx')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-t"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT (TRC20)</div>
+              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+
+        <div onclick="openDepositModal('USDT (ERC20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs"><i class="fa-brands fa-ethereum"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT (ERC20)</div>
+              <div class="text-[10px] text-stone-400">Min: 1.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+
+        <div onclick="openDepositModal('USDT (TON)', '5.00', 'UQBA6P_n31uh6xo3HKWzKQVvkN4McRFmjY5phXFDYkAIDCJ6')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:bg-stone-50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-gem"></i></div>
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT (TON)</div>
+              <div class="text-[10px] text-stone-400">Min: 5.00 USD</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
+      </div>
+
+      <!-- Withdraw Sub-Page -->
+      <div id="sub-withdraw-form" class="space-y-3 hidden">
+        <div class="bg-white p-4 rounded-2xl border border-stone-200 space-y-3 shadow-sm">
+          <div>
+            <label class="text-xs font-semibold text-stone-500 block mb-1">Select Asset</label>
+            <select id="withdraw-asset" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs text-stone-800 outline-none">
+              <option value="USDT (BEP20)">USDT (BEP20)</option>
+              <option value="USDT (TRC20)">USDT (TRC20)</option>
+              <option value="USDT (ERC20)">USDT (ERC20)</option>
+              <option value="USDT (TON)">USDT (TON)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-stone-500 block mb-1">Your Destination Address</label>
+            <input type="text" id="withdraw-address" placeholder="Paste your wallet address" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-stone-500 block mb-1">Amount (USD)</label>
+            <input type="number" id="withdraw-amount" min="1" placeholder="Min 1.00 USD" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
+          </div>
+          <button onclick="submitWithdraw()" id="btn-submit-withdraw" class="w-full bg-[#155E45] text-white py-3 rounded-xl text-xs font-bold active:scale-95 transition">Request Payout</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: PROFILE -->
+    <section id="tab-profile" class="tab-page hidden">
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Account Info</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">Profile</h2>
+      <div class="bg-white rounded-2xl p-4 border border-stone-200 space-y-3 mb-4 shadow-sm">
+        <div class="flex items-center justify-between border-b border-stone-100 pb-2">
+          <span class="text-xs text-stone-400">Telegram User ID</span>
+          <span class="text-sm font-bold text-stone-800" id="user-tg-id">8181751673</span>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Modal -->
+  <!-- Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-[#F6F4EE] border-t border-stone-200 px-4 py-2 flex justify-around items-center z-50">
+    <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center nav-active">
+      <i class="fa-solid fa-shapes text-lg mb-1"></i>
+      <span class="text-[10px]">Properties</span>
+    </button>
+    <button onclick="switchTab('myresort')" id="btn-myresort" class="nav-btn flex flex-col items-center text-stone-400">
+      <i class="fa-solid fa-hotel text-lg mb-1"></i>
+      <span class="text-[10px]">My Resort</span>
+    </button>
+    <button onclick="switchTab('friends')" id="btn-friends" class="nav-btn flex flex-col items-center text-stone-400">
+      <i class="fa-solid fa-gift text-lg mb-1"></i>
+      <span class="text-[10px]">Friends</span>
+    </button>
+    <button onclick="switchTab('wallet')" id="btn-wallet" class="nav-btn flex flex-col items-center text-stone-400">
+      <i class="fa-solid fa-wallet text-lg mb-1"></i>
+      <span class="text-[10px]">Wallet</span>
+    </button>
+    <button onclick="switchTab('profile')" id="btn-profile" class="nav-btn flex flex-col items-center text-stone-400">
+      <i class="fa-solid fa-user text-lg mb-1"></i>
+      <span class="text-[10px]">Profile</span>
+    </button>
+  </nav>
+
+  <!-- Deposit Modal -->
   <div id="deposit-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-3xl p-5 w-full max-w-sm text-center">
-      <h3 class="font-bold text-base" id="modal-coin">Deposit</h3>
-      <div class="my-3 bg-stone-50 p-2.5 rounded-xl border text-xs font-mono break-all" id="modal-addr"></div>
-      <input type="number" id="dep-amt" placeholder="Amount (USD)" class="w-full bg-stone-50 border p-2 text-xs rounded-xl mb-2" />
-      <input type="text" id="dep-txid" placeholder="Transaction TXID" class="w-full bg-stone-50 border p-2 text-xs rounded-xl mb-3" />
-      <button onclick="submitDeposit()" class="w-full bg-[#155E45] text-white py-2.5 rounded-xl text-xs font-bold">Submit Proof</button>
-      <button onclick="closeModal()" class="mt-2 text-xs text-stone-400">Cancel</button>
+    <div class="bg-white rounded-3xl p-5 w-full max-w-sm text-center shadow-2xl">
+      <h3 class="font-bold text-base text-stone-800" id="modal-coin-title">Deposit</h3>
+      <p class="text-xs text-emerald-700 font-semibold mt-1" id="modal-min-amount">Min deposit: 1.00 USD</p>
+      
+      <div class="my-3 bg-stone-50 p-3 rounded-2xl border border-stone-200 text-left">
+        <span class="text-[10px] text-stone-400 font-bold block mb-1 uppercase">Official Deposit Address</span>
+        <code class="text-xs font-mono break-all text-stone-800 select-all font-semibold block" id="modal-address">Address</code>
+        <button onclick="copyDepositAddress()" class="mt-2 w-full bg-[#155E45] text-white py-1.5 rounded-lg text-xs font-semibold active:scale-95 transition">
+          <i class="fa-regular fa-copy mr-1"></i> Copy Address
+        </button>
+      </div>
+
+      <div class="text-left space-y-2 mt-4 pt-3 border-t border-stone-100">
+        <label class="text-[11px] font-bold text-stone-600 block">Submit Proof After Transfer:</label>
+        <input type="number" id="deposit-tx-amount" placeholder="Amount sent in USD" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2 text-xs outline-none" />
+        <input type="text" id="deposit-txid" placeholder="Transaction Hash / TXID" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2 text-xs outline-none" />
+        
+        <button onclick="submitDepositProof()" id="btn-submit-proof" class="w-full bg-[#155E45] text-white py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">
+          Confirm Deposit
+        </button>
+      </div>
+
+      <button onclick="closeModal()" class="mt-2 text-xs text-stone-400 font-semibold hover:text-stone-600">Close Window</button>
     </div>
   </div>
 
   <script>
     const WORKER_URL = "https://broken-grass-597c.awekezewuduu.workers.dev";
     let balance = 0.50;
-    let curCoin = "";
-    let userId = "8181751673";
-    let userHandle = "@Biilget";
+    let ownedProperties = [];
+    let currentCoin = '';
+    let currentMin = 1.00;
+    let currentUserId = '8181751673';
+    let currentUserHandle = '@Biilget';
 
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
-      const u = window.Telegram.WebApp.initDataUnsafe?.user;
-      if (u) {
-        userId = u.id;
-        userHandle = u.username ? '@' + u.username : u.first_name;
+      window.Telegram.WebApp.expand();
+      const user = window.Telegram.WebApp.initDataUnsafe?.user;
+      if (user) {
+        currentUserId = user.id;
+        currentUserHandle = user.username ? '@' + user.username : (user.first_name || 'User');
+        document.getElementById('user-tg-id').innerText = user.id;
+        document.getElementById('ref-link').value = `https://t.me/Fidromining_bot/app?startapp=${user.id}`;
       }
     }
 
-    async function syncData() {
+    // Live Sync with Worker Backend
+    async function syncUserData() {
       try {
-        const res = await fetch(`${WORKER_URL}/status?uid=${userId}`);
+        const res = await fetch(`${WORKER_URL}/status?uid=${currentUserId}`);
         const data = await res.json();
-        if (data.balance) {
+        if (data.balance !== undefined) {
           balance = parseFloat(data.balance);
-          document.getElementById('header-balance').innerText = balance.toFixed(2) + " USD";
-          document.getElementById('wallet-balance').innerText = balance.toFixed(2) + " USD";
+          updateUI();
         }
-      } catch (e) {}
-    }
-    syncData();
-    setInterval(syncData, 5000);
 
-    function switchTab(t) {
-      document.querySelectorAll('.tab-page').forEach(e => e.classList.add('hidden'));
-      document.getElementById('tab-' + t).classList.remove('hidden');
+        const banner = document.getElementById('status-banner');
+        if (data.status === 'pending') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-amber-50 border-amber-200 text-amber-800 shadow-sm";
+          banner.innerText = "⏳ Deposit Pending: Waiting for verification";
+          banner.classList.remove('hidden');
+        } else if (data.status === 'approved') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-emerald-50 border-emerald-200 text-[#155E45] shadow-sm";
+          banner.innerText = "✅ Deposit Confirmed & Credited!";
+          banner.classList.remove('hidden');
+        } else if (data.status === 'rejected') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-rose-50 border-rose-200 text-rose-800 shadow-sm";
+          banner.innerText = "❌ Deposit Rejected (Invalid TXID)";
+          banner.classList.remove('hidden');
+        } else {
+          banner.classList.add('hidden');
+        }
+      } catch (err) {
+        console.log("Sync error:", err);
+      }
     }
 
-    function openModal(coin, min, addr) {
-      curCoin = coin;
-      document.getElementById('modal-coin').innerText = "Deposit " + coin;
-      document.getElementById('modal-addr').innerText = addr;
+    syncUserData();
+    setInterval(syncUserData, 4000); // Poll status every 4 seconds
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(el => {
+        el.classList.remove('nav-active');
+        el.classList.add('text-stone-400');
+      });
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      document.getElementById('btn-' + tabId).classList.add('nav-active');
+      document.getElementById('btn-' + tabId).classList.remove('text-stone-400');
+    }
+
+    function showSubTab(type) {
+      if(type === 'deposit-list') {
+        document.getElementById('sub-deposit-list').classList.remove('hidden');
+        document.getElementById('sub-withdraw-form').classList.add('hidden');
+      } else {
+        document.getElementById('sub-deposit-list').classList.add('hidden');
+        document.getElementById('sub-withdraw-form').classList.remove('hidden');
+      }
+    }
+
+    function buyProperty(name, price, dailyYield) {
+      if (balance < price) {
+        alert("Insufficient balance! Please deposit funds in your wallet.");
+        switchTab('wallet');
+        return;
+      }
+      balance -= price;
+      ownedProperties.push({ name, dailyYield });
+      updateUI();
+      alert(`Success! ${name} is now actively producing daily yields.`);
+    }
+
+    function updateUI() {
+      document.getElementById('header-balance').innerText = balance.toFixed(2) + ' USD';
+      document.getElementById('wallet-balance').innerHTML = balance.toFixed(2) + ' <span class="text-base font-medium">USD</span>';
+      
+      let totalDaily = ownedProperties.reduce((sum, r) => sum + r.dailyYield, 0);
+      let totalMonthly = totalDaily * 30;
+
+      document.getElementById('dash-rigs').innerHTML = `${ownedProperties.length} <span class="text-[10px] text-stone-400 font-normal">/ 10</span>`;
+      document.getElementById('dash-daily').innerHTML = totalDaily.toFixed(2) + ' <span class="text-[9px] text-stone-500">USD</span>';
+
+      document.getElementById('active-rigs-count').innerText = ownedProperties.length;
+      document.getElementById('daily-profit').innerHTML = totalDaily.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
+      document.getElementById('monthly-profit').innerHTML = totalMonthly.toFixed(2) + ' <span class="text-xs text-stone-500">USD</span>';
+    }
+
+    function openDepositModal(coin, min, addr) {
+      currentCoin = coin;
+      currentMin = parseFloat(min);
+      document.getElementById('modal-coin-title').innerText = 'Deposit ' + coin;
+      document.getElementById('modal-min-amount').innerText = 'Min deposit: ' + min + ' USD';
+      document.getElementById('modal-address').innerText = addr;
+      document.getElementById('deposit-tx-amount').value = '';
+      document.getElementById('deposit-txid').value = '';
       document.getElementById('deposit-modal').classList.remove('hidden');
       document.getElementById('deposit-modal').classList.add('flex');
     }
@@ -131,19 +498,83 @@
       document.getElementById('deposit-modal').classList.remove('flex');
     }
 
-    async function submitDeposit() {
-      const amt = document.getElementById('dep-amt').value;
-      const txid = document.getElementById('dep-txid').value.trim();
-      if (!amt || !txid) return alert("Fill all fields");
+    function copyDepositAddress() {
+      const addr = document.getElementById('modal-address').innerText;
+      navigator.clipboard.writeText(addr);
+      alert("Deposit address copied!");
+    }
 
-      await fetch(`${WORKER_URL}/submit-deposit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, username: userHandle, coin: curCoin, amount: amt, txid })
-      });
+    async function submitDepositProof() {
+      const amount = parseFloat(document.getElementById('deposit-tx-amount').value);
+      const txid = document.getElementById('deposit-txid').value.trim();
 
-      alert("Submitted! Wait for verification.");
-      closeModal();
+      if (isNaN(amount) || amount < currentMin) {
+        alert(`Minimum deposit is ${currentMin} USD.`);
+        return;
+      }
+      if (!txid) {
+        alert("Please paste your transaction hash/TXID.");
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit-proof');
+      btn.innerText = "Submitting...";
+      btn.disabled = true;
+
+      try {
+        await fetch(`${WORKER_URL}/submit-deposit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: currentUserId,
+            username: currentUserHandle,
+            coin: currentCoin,
+            amount: amount,
+            txid: txid
+          })
+        });
+
+        alert("Deposit submitted! Status is now confirming...");
+        closeModal();
+        syncUserData();
+      } catch (err) {
+        alert("Error submitting. Please try again.");
+      } finally {
+        btn.innerText = "Confirm Deposit";
+        btn.disabled = false;
+      }
+    }
+
+    function submitWithdraw() {
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      const addr = document.getElementById('withdraw-address').value.trim();
+      const asset = document.getElementById('withdraw-asset').value;
+
+      if (!addr) {
+        alert("Please enter payout address.");
+        return;
+      }
+      if (isNaN(amount) || amount < 1.00) {
+        alert("Minimum withdrawal is 1.00 USD.");
+        return;
+      }
+      if (amount > balance) {
+        alert("Insufficient balance.");
+        return;
+      }
+
+      balance -= amount;
+      updateUI();
+      alert("Withdrawal request submitted! Payout will be processed shortly.");
+      document.getElementById('withdraw-amount').value = '';
+      document.getElementById('withdraw-address').value = '';
+    }
+
+    function copyRefLink() {
+      const link = document.getElementById('ref-link');
+      link.select();
+      navigator.clipboard.writeText(link.value);
+      alert("Referral link copied!");
     }
   </script>
 </body>
