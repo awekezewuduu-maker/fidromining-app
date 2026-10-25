@@ -320,7 +320,7 @@
       <div class="bg-white rounded-2xl p-4 border border-stone-200 space-y-3 mb-4 shadow-sm">
         <div class="flex items-center justify-between border-b border-stone-100 pb-2">
           <span class="text-xs text-stone-400">Telegram User ID</span>
-          <span class="text-sm font-bold text-stone-800" id="user-tg-id">8181751673</span>
+          <span class="text-sm font-bold text-stone-800" id="user-tg-id">...</span>
         </div>
       </div>
     </section>
@@ -380,32 +380,41 @@
 
   <script>
     const WORKER_URL = "https://broken-grass-597c.awekezewuduu.workers.dev";
-    let balance = 0.50;
-    let ownedProperties = [];
+    
+    // Auto-detect user ID from Telegram WebApp or URL or local storage
+    let currentUserId = localStorage.getItem('fidro_uid') || '8181751673';
+    let currentUserHandle = localStorage.getItem('fidro_handle') || '@Biilget';
+    let balance = parseFloat(localStorage.getItem('fidro_balance')) || 0.50;
+    let ownedProperties = JSON.parse(localStorage.getItem('fidro_owned') || '[]');
+
     let currentCoin = '';
     let currentMin = 1.00;
-    let currentUserId = '8181751673';
-    let currentUserHandle = '@Biilget';
 
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
       const user = window.Telegram.WebApp.initDataUnsafe?.user;
-      if (user) {
-        currentUserId = user.id;
+      if (user && user.id) {
+        currentUserId = String(user.id);
         currentUserHandle = user.username ? '@' + user.username : (user.first_name || 'User');
-        document.getElementById('user-tg-id').innerText = user.id;
-        document.getElementById('ref-link').value = `https://t.me/Fidromining_bot/app?startapp=${user.id}`;
+        localStorage.setItem('fidro_uid', currentUserId);
+        localStorage.setItem('fidro_handle', currentUserHandle);
       }
     }
 
-    // Live Sync with Worker Backend
+    document.getElementById('user-tg-id').innerText = currentUserId;
+    document.getElementById('ref-link').value = `https://t.me/Fidromining_bot/app?startapp=${currentUserId}`;
+    updateUI();
+
+    // Live Sync with Worker Backend using the active currentUserId
     async function syncUserData() {
       try {
         const res = await fetch(`${WORKER_URL}/status?uid=${currentUserId}`);
         const data = await res.json();
-        if (data.balance !== undefined) {
+        
+        if (data.balance !== undefined && data.balance !== null) {
           balance = parseFloat(data.balance);
+          localStorage.setItem('fidro_balance', balance);
           updateUI();
         }
 
@@ -431,7 +440,7 @@
     }
 
     syncUserData();
-    setInterval(syncUserData, 4000); // Poll status every 4 seconds
+    setInterval(syncUserData, 3000); // Poll status every 3 seconds
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
@@ -462,13 +471,15 @@
       }
       balance -= price;
       ownedProperties.push({ name, dailyYield });
+      localStorage.setItem('fidro_balance', balance);
+      localStorage.setItem('fidro_owned', JSON.stringify(ownedProperties));
       updateUI();
       alert(`Success! ${name} is now actively producing daily yields.`);
     }
 
     function updateUI() {
-      document.getElementById('header-balance').innerText = balance.toFixed(2) + ' USD';
-      document.getElementById('wallet-balance').innerHTML = balance.toFixed(2) + ' <span class="text-base font-medium">USD</span>';
+      document.getElementById('header-balance').innerHTML = `${balance.toFixed(2)} <span class="text-[9px] text-stone-500">USD</span>`;
+      document.getElementById('wallet-balance').innerHTML = `${balance.toFixed(2)} <span class="text-base font-medium">USD</span>`;
       
       let totalDaily = ownedProperties.reduce((sum, r) => sum + r.dailyYield, 0);
       let totalMonthly = totalDaily * 30;
@@ -564,6 +575,7 @@
       }
 
       balance -= amount;
+      localStorage.setItem('fidro_balance', balance);
       updateUI();
       alert("Withdrawal request submitted! Payout will be processed shortly.");
       document.getElementById('withdraw-amount').value = '';
