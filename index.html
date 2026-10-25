@@ -381,6 +381,7 @@
   <script>
     const WORKER_URL = "https://broken-grass-597c.awekezewuduu.workers.dev";
     
+    // User detection
     let currentUserId = '8181751673';
     let currentUserHandle = '@Biilget';
 
@@ -403,6 +404,47 @@
     let currentMin = 1.00;
 
     updateUI();
+
+    // 🔴 THIS IS WHAT WAS MISSING: LIVE POLLING FROM TELEGRAM ADMIN CLICK!
+    async function pollAdminConfirmation() {
+      try {
+        const res = await fetch(`${WORKER_URL}/status?uid=${currentUserId}`);
+        const data = await res.json();
+        const banner = document.getElementById('status-banner');
+
+        if (data.status === 'pending') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-amber-50 border-amber-200 text-amber-800 shadow-sm";
+          banner.innerText = "⏳ Deposit Pending: Waiting for admin approval";
+          banner.classList.remove('hidden');
+        } else if (data.status === 'approved') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-emerald-50 border-emerald-200 text-[#155E45] shadow-sm";
+          banner.innerText = "✅ Deposit Confirmed & Credited!";
+          banner.classList.remove('hidden');
+
+          // Credit balance when admin approved
+          const pendingAmt = parseFloat(localStorage.getItem('fidro_pending_amt_' + currentUserId)) || 0;
+          if (pendingAmt > 0) {
+            balance += pendingAmt;
+            localStorage.removeItem('fidro_pending_amt_' + currentUserId);
+            saveData();
+            updateUI();
+          }
+        } else if (data.status === 'rejected') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-rose-50 border-rose-200 text-rose-800 shadow-sm";
+          banner.innerText = "❌ Deposit Rejected (Invalid TXID)";
+          banner.classList.remove('hidden');
+          localStorage.removeItem('fidro_pending_amt_' + currentUserId);
+        } else {
+          banner.classList.add('hidden');
+        }
+      } catch (err) {
+        console.log("Polling error:", err);
+      }
+    }
+
+    // Check every 3 seconds for your Telegram click
+    setInterval(pollAdminConfirmation, 3000);
+    pollAdminConfirmation();
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
@@ -481,6 +523,7 @@
       alert("Deposit address copied!");
     }
 
+    // Submit Proof: Stays pending until YOU click Confirm & Credit in Telegram
     async function submitDepositProof() {
       const amount = parseFloat(document.getElementById('deposit-tx-amount').value);
       const txid = document.getElementById('deposit-txid').value.trim();
@@ -511,11 +554,14 @@
           })
         });
 
-        alert("Deposit proof submitted! It will appear in admin panel for verification.");
+        // Save pending amount on their device
+        localStorage.setItem('fidro_pending_amt_' + currentUserId, amount);
+
+        alert("Deposit submitted! Waiting for admin to confirm in Telegram.");
         closeModal();
+        pollAdminConfirmation();
       } catch (err) {
-        alert("Submitted!");
-        closeModal();
+        alert("Submission failed. Please try again.");
       } finally {
         btn.innerText = "Confirm Deposit";
         btn.disabled = false;
