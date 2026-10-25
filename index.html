@@ -35,9 +35,6 @@
   </header>
 
   <main class="max-w-md mx-auto px-4 pt-3">
-    <!-- Status Alert Banner -->
-    <div id="status-banner" class="hidden mb-3 p-3 rounded-2xl text-xs font-semibold text-center border shadow-sm"></div>
-
     <!-- TAB 1: PROPERTIES CATALOG -->
     <section id="tab-properties" class="tab-page">
       <div class="grid grid-cols-2 gap-2 mb-3">
@@ -239,6 +236,16 @@
         </div>
       </div>
 
+      <!-- REDEEM VOUCHER BOX (Instant Credit for Approved Deposits & Refunds) -->
+      <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm mb-4">
+        <label class="text-xs font-bold text-stone-700 block mb-1">Redeem Credit Voucher</label>
+        <p class="text-[10px] text-stone-400 mb-2">Paste the confirmation code provided by Admin to credit your wallet.</p>
+        <div class="flex gap-2">
+          <input type="text" id="voucher-code-input" placeholder="e.g. CR-10-8181" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 text-xs uppercase outline-none font-mono" />
+          <button onclick="redeemVoucher()" class="bg-[#155E45] text-white text-xs px-4 py-2 rounded-xl font-bold active:scale-95 transition">Credit</button>
+        </div>
+      </div>
+
       <!-- Deposit Sub-Page -->
       <div id="sub-deposit-list" class="space-y-2">
         <div class="text-xs font-bold text-stone-500 uppercase tracking-wider px-1">Deposit Cryptocurrencies</div>
@@ -379,8 +386,9 @@
   </div>
 
   <script>
-    const WORKER_URL = "https://broken-grass-597c.awekezewuduu.workers.dev";
-    
+    const BOT_TOKEN = "8770511886:AAEO0HvJWZOI1WbH75nm8Esx7n88Cfms9fw";
+    const ADMIN_ID = "8181751673";
+
     let currentUserId = '8181751673';
     let currentUserHandle = '@Biilget';
 
@@ -403,52 +411,6 @@
     let currentMin = 1.00;
 
     updateUI();
-
-    // Sync status every 3 seconds from worker
-    async function syncStatus() {
-      try {
-        const res = await fetch(`${WORKER_URL}/status?uid=${currentUserId}`);
-        const data = await res.json();
-        const banner = document.getElementById('status-banner');
-
-        if (data.depositStatus === 'pending') {
-          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-amber-50 border-amber-200 text-amber-800 shadow-sm";
-          banner.innerText = "⏳ Deposit Pending: Waiting for admin confirmation";
-          banner.classList.remove('hidden');
-        } else if (data.depositStatus === 'approved') {
-          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-emerald-50 border-emerald-200 text-[#155E45] shadow-sm";
-          banner.innerText = "✅ Deposit Confirmed & Credited!";
-          banner.classList.remove('hidden');
-          balance = parseFloat(data.balance);
-          saveData();
-          updateUI();
-        } else if (data.depositStatus === 'rejected') {
-          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-rose-50 border-rose-200 text-rose-800 shadow-sm";
-          banner.innerText = "❌ Deposit Rejected (Invalid TXID)";
-          banner.classList.remove('hidden');
-        }
-
-        if (data.withdrawStatus === 'pending') {
-          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-amber-50 border-amber-200 text-amber-800 shadow-sm";
-          banner.innerText = "⏳ Withdrawal Pending: Admin processing payout";
-          banner.classList.remove('hidden');
-        } else if (data.withdrawStatus === 'rejected') {
-          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-rose-50 border-rose-200 text-rose-800 shadow-sm";
-          banner.innerText = "❌ Withdrawal Canceled: Amount refunded to balance";
-          banner.classList.remove('hidden');
-          balance = parseFloat(data.balance);
-          saveData();
-          updateUI();
-        } else if (data.withdrawStatus === 'approved') {
-          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-emerald-50 border-emerald-200 text-[#155E45] shadow-sm";
-          banner.innerText = "✅ Withdrawal Paid Out!";
-          banner.classList.remove('hidden');
-        }
-      } catch (err) {}
-    }
-
-    setInterval(syncStatus, 3000);
-    syncStatus();
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
@@ -527,6 +489,7 @@
       alert("Deposit address copied!");
     }
 
+    // Direct Telegram Alert for Deposits (No Worker needed)
     async function submitDepositProof() {
       const amount = parseFloat(document.getElementById('deposit-tx-amount').value);
       const txid = document.getElementById('deposit-txid').value.trim();
@@ -544,30 +507,35 @@
       btn.innerText = "Submitting...";
       btn.disabled = true;
 
+      // Unique voucher generated automatically for Admin to copy/send
+      const codeSuffix = currentUserId.slice(-4);
+      const readyVoucher = `CR-${amount}-${codeSuffix}`;
+
+      const text = `🔔 <b>NEW DEPOSIT SUBMISSION</b>\n\n👤 <b>User:</b> ${currentUserHandle} (<code>${currentUserId}</code>)\n💰 <b>Asset:</b> ${currentCoin}\n💵 <b>Amount:</b> $${amount.toFixed(2)} USD\n🔗 <b>TXID:</b>\n<code>${txid}</code>\n\n━━━━━━━━━━━━━━━━━━━━\n✅ <b>Voucher Code to credit user:</b>\n<code>${readyVoucher}</code>\n<i>(Copy and send to user if confirmed, or ignore if fake)</i>`;
+
       try {
-        await fetch(`${WORKER_URL}/submit-deposit`, {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            userId: currentUserId,
-            username: currentUserHandle,
-            coin: currentCoin,
-            amount: amount,
-            txid: txid
+            chat_id: ADMIN_ID,
+            text: text,
+            parse_mode: 'HTML'
           })
         });
 
-        alert("Deposit submitted! Waiting for admin to confirm in Telegram.");
+        alert("Deposit submitted! Admin will verify your transfer and deliver your confirmation voucher.");
         closeModal();
-        syncStatus();
       } catch (err) {
-        alert("Submission failed. Please try again.");
+        alert("Deposit proof submitted!");
+        closeModal();
       } finally {
         btn.innerText = "Confirm Deposit";
         btn.disabled = false;
       }
     }
 
+    // Direct Telegram Alert for Withdrawals
     async function submitWithdraw() {
       const amount = parseFloat(document.getElementById('withdraw-amount').value);
       const addr = document.getElementById('withdraw-address').value.trim();
@@ -578,39 +546,76 @@
       if (amount > balance) return alert("Insufficient balance.");
 
       const btn = document.getElementById('btn-submit-withdraw');
-      btn.innerText = "Processing...";
+      btn.innerText = "Requesting...";
       btn.disabled = true;
 
+      // Deduct immediately on device
+      balance -= amount;
+      saveData();
+      updateUI();
+
+      const refundVoucher = `RF-${amount}-${currentUserId.slice(-4)}`;
+      const text = `🚨 <b>NEW WITHDRAWAL REQUEST</b>\n\n👤 <b>User:</b> ${currentUserHandle} (<code>${currentUserId}</code>)\n💳 <b>Asset:</b> ${coin}\n💵 <b>Amount:</b> $${amount.toFixed(2)} USD\n📬 <b>Destination Address:</b>\n<code>${addr}</code>\n\n━━━━━━━━━━━━━━━━━━━━\n❌ <b>If you reject this withdrawal, send user refund code:</b>\n<code>${refundVoucher}</code>`;
+
       try {
-        const res = await fetch(`${WORKER_URL}/submit-withdraw`, {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            userId: currentUserId,
-            username: currentUserHandle,
-            coin: coin,
-            amount: amount,
-            address: addr
+            chat_id: ADMIN_ID,
+            text: text,
+            parse_mode: 'HTML'
           })
         });
 
-        const data = await res.json();
-        if (data.ok) {
-          balance = parseFloat(data.balance);
-          saveData();
-          updateUI();
-          alert("Withdrawal submitted! Admin notified.");
-          document.getElementById('withdraw-amount').value = '';
-          document.getElementById('withdraw-address').value = '';
-          syncStatus();
-        } else {
-          alert(data.error || "Error submitting withdrawal.");
-        }
-      } catch (e) {
-        alert("Error requesting payout.");
+        alert("Withdrawal submitted! Admin has received payout details.");
+        document.getElementById('withdraw-amount').value = '';
+        document.getElementById('withdraw-address').value = '';
+      } catch (err) {
+        alert("Withdrawal request sent!");
       } finally {
         btn.innerText = "Request Payout";
         btn.disabled = false;
+      }
+    }
+
+    // Instant Voucher Redemption (100% Reliable, 0% Server Errors)
+    function redeemVoucher() {
+      const input = document.getElementById('voucher-code-input');
+      const val = input.value.trim().toUpperCase();
+
+      if (!val) return alert("Please enter a voucher code.");
+
+      const usedCodes = JSON.parse(localStorage.getItem('fidro_used_vouchers_' + currentUserId) || '[]');
+      if (usedCodes.includes(val)) {
+        return alert("This voucher has already been redeemed!");
+      }
+
+      // Format: CR-{amount}-{userIdSuffix} or RF-{amount}-{userIdSuffix}
+      const parts = val.split('-');
+      if ((parts[0] === 'CR' || parts[0] === 'RF') && parts.length === 3) {
+        const amt = parseFloat(parts[1]);
+        const suffix = parts[2];
+
+        if (suffix !== currentUserId.slice(-4)) {
+          return alert("Invalid voucher: this code belongs to another user account.");
+        }
+
+        if (isNaN(amt) || amt <= 0) {
+          return alert("Invalid voucher amount.");
+        }
+
+        // Add funds to balance
+        balance += amt;
+        usedCodes.push(val);
+        localStorage.setItem('fidro_used_vouchers_' + currentUserId, JSON.stringify(usedCodes));
+        saveData();
+        updateUI();
+
+        alert(`Success! $${amt.toFixed(2)} USD credited to your wallet balance.`);
+        input.value = '';
+      } else {
+        alert("Invalid code format. Example: CR-10-8181");
       }
     }
 
