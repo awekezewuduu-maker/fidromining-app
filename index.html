@@ -241,7 +241,7 @@
         </button>
       </div>
 
-      <!-- History Access Cards -->
+      <!-- History Cards -->
       <div class="bg-white rounded-[22px] p-3.5 border border-stone-200/70 shadow-sm flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 rounded-full bg-emerald-50 text-[#154D38] flex items-center justify-center text-xs">
@@ -347,7 +347,7 @@
     </section>
   </main>
 
-  <!-- Navigation -->
+  <!-- Bottom Navigation -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-stone-200/80 px-2 py-2 flex justify-around items-center z-40">
     <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center px-3 py-1.5 nav-active">
       <i class="fa-solid fa-shapes text-sm mb-0.5"></i>
@@ -425,6 +425,7 @@
     let currentUserHandle = 'Aweke275';
     let detectedReferrer = null;
 
+    // Detect user and any incoming referral parameter through multiple fallback methods
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
@@ -434,11 +435,27 @@
         currentUserHandle = tgUser.username ? tgUser.username : (tgUser.first_name || 'User');
       }
 
-      // Read startapp referrer parameter
-      const startParam = window.Telegram.WebApp.initDataUnsafe?.start_param;
-      if (startParam && String(startParam) !== String(currentUserId)) {
-        detectedReferrer = String(startParam);
+      // Method A: initDataUnsafe start_param
+      if (window.Telegram.WebApp.initDataUnsafe?.start_param) {
+        detectedReferrer = String(window.Telegram.WebApp.initDataUnsafe.start_param);
       }
+    }
+
+    // Method B: URL Search Params (?startapp= or ?tgWebAppStartParam=)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!detectedReferrer) {
+      detectedReferrer = urlParams.get('startapp') || urlParams.get('tgWebAppStartParam');
+    }
+
+    // Method C: Hash URL check (#tgWebAppData=...)
+    if (!detectedReferrer && window.location.hash) {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      detectedReferrer = hashParams.get('tgWebAppStartParam') || hashParams.get('startapp');
+    }
+
+    // Prevent users from referring themselves
+    if (detectedReferrer && String(detectedReferrer) === String(currentUserId)) {
+      detectedReferrer = null;
     }
 
     document.getElementById('profile-id-display').innerText = currentUserId;
@@ -460,7 +477,7 @@
       { id: 'island', name: 'Imperial Private Island', tag: 'Similan · Private Island', price: 350.00, daily: 105.00, monthly: 3150.00, img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&auto=format&fit=crop&q=80' }
     ];
 
-    let balance = 0.50; // Default $0.50 welcome balance
+    let balance = 0.50; // Every user starts with $0.50
     let totalDeposited = 0.00;
     let totalWithdrawn = 0.00;
     let referralEarnings = 0.00;
@@ -477,11 +494,14 @@
 
     const userRef = db.ref('users/' + currentUserId);
 
-    // Initial check for new registration & referral link binding
+    // Initial Registration & Referral Connection Check
     userRef.once('value').then(snap => {
-      if (!snap.exists()) {
+      const existing = snap.val();
+      
+      // If user does not exist in Firebase, initialize them
+      if (!existing) {
         userRef.set({
-          balance: 0.50, // $0.50 signup bonus for every user
+          balance: 0.50, // $0.50 signup bonus
           totalDeposited: 0.00,
           totalWithdrawn: 0.00,
           referralEarnings: 0.00,
@@ -493,14 +513,14 @@
           ownedProperties: {}
         });
 
-        // Credit $0.01 bonus & +1 friend to the inviter
+        // Credit the inviter with +1 friend and +$0.01 bonus
         if (detectedReferrer) {
           const refUserRef = db.ref('users/' + detectedReferrer);
           refUserRef.once('value').then(refSnap => {
             if (refSnap.exists()) {
               const refData = refSnap.val();
-              const newCount = (refData.friendsCount || 0) + 1;
-              const newRefEarnings = parseFloat(((refData.referralEarnings || 0) + 0.01).toFixed(2));
+              const newCount = (parseInt(refData.friendsCount) || 0) + 1;
+              const newRefEarnings = parseFloat(((parseFloat(refData.referralEarnings) || 0) + 0.01).toFixed(2));
               refUserRef.update({
                 friendsCount: newCount,
                 referralEarnings: newRefEarnings
@@ -508,10 +528,26 @@
             }
           });
         }
+      } 
+      // If user already exists but does NOT have a referrer attached yet, attach it now
+      else if (!existing.referrerId && detectedReferrer) {
+        userRef.update({ referrerId: detectedReferrer });
+        const refUserRef = db.ref('users/' + detectedReferrer);
+        refUserRef.once('value').then(refSnap => {
+          if (refSnap.exists()) {
+            const refData = refSnap.val();
+            const newCount = (parseInt(refData.friendsCount) || 0) + 1;
+            const newRefEarnings = parseFloat(((parseFloat(refData.referralEarnings) || 0) + 0.01).toFixed(2));
+            refUserRef.update({
+              friendsCount: newCount,
+              referralEarnings: newRefEarnings
+            });
+          }
+        });
       }
     });
 
-    // Realtime Listener
+    // Realtime Database Listener
     userRef.on('value', (snap) => {
       const data = snap.val();
       if (data) {
@@ -891,15 +927,15 @@
           depositStatus: 'approved_ack'
         });
 
-        // 20% referrer commission
+        // Award 20% commission to the person who invited this user
         if (targetData.referrerId) {
           const refUserRef = db.ref('users/' + targetData.referrerId);
           const refSnap = await refUserRef.once('value');
           if (refSnap.exists()) {
             const refData = refSnap.val();
             const commission = parseFloat((targetAmt * 0.20).toFixed(2));
-            const newRefEarnings = parseFloat(((refData.referralEarnings || 0) + commission).toFixed(2));
-            const newRefDepSum = parseFloat(((refData.friendsDeposits || 0) + targetAmt).toFixed(2));
+            const newRefEarnings = parseFloat(((parseFloat(refData.referralEarnings) || 0) + commission).toFixed(2));
+            const newRefDepSum = parseFloat(((parseFloat(refData.friendsDeposits) || 0) + targetAmt).toFixed(2));
             await refUserRef.update({
               referralEarnings: newRefEarnings,
               friendsDeposits: newRefDepSum
@@ -907,7 +943,7 @@
           }
         }
 
-        alert(`✅ Success! Credited $${targetAmt} to User ${targetUid}. Referrer awarded 20% commission!`);
+        alert(`✅ Success! Credited $${targetAmt} to User ${targetUid}. Referrer received 20% commission ($${(targetAmt * 0.20).toFixed(2)})!`);
         document.getElementById('admin-target-amt').value = '';
       }
       else if (actionType === 'reject_deposit') {
