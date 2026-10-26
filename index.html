@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <!-- Balance Pill -->
+    <!-- Balance Pill Button -->
     <div onclick="switchTab('wallet')" class="bg-white/90 border border-stone-200/80 rounded-full px-3 py-1 flex items-center gap-2 cursor-pointer shadow-sm active:scale-95 transition">
       <div class="text-right">
         <span class="text-[8px] text-stone-400 block leading-none">Your balance</span>
@@ -130,9 +130,9 @@
       </div>
     </section>
 
-    <!-- ==================== TAB 4: WALLET (WITH FULL VISUAL COIN LIST) ==================== -->
+    <!-- ==================== TAB 4: WALLET ==================== -->
     <section id="tab-wallet" class="tab-page hidden space-y-3">
-      <!-- Wallet Status Banner -->
+      <!-- Wallet Banner -->
       <div id="wallet-status-banner" class="hidden p-3 rounded-2xl text-xs font-semibold flex items-center justify-between border shadow-sm">
         <span id="wallet-status-text">Status message</span>
         <button onclick="dismissWalletBanner()" class="text-stone-400 font-bold ml-2 text-sm">✕</button>
@@ -157,11 +157,10 @@
         </div>
       </div>
 
-      <!-- VISUAL DEPOSIT METHODS WITH LOGOS / PICTURES -->
+      <!-- VISUAL DEPOSIT LIST WITH LOGOS -->
       <div id="deposit-options" class="bg-white rounded-[24px] p-4 border border-stone-200/70 shadow-sm space-y-2.5">
         <div class="text-xs font-bold text-stone-800 mb-1">Select Deposit Method</div>
         
-        <!-- USDT BEP20 -->
         <div onclick="openDepositModal('USDT (BEP20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="p-3 bg-[#F7F5EE] rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:scale-98 transition">
           <div class="flex items-center gap-3">
             <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" class="w-8 h-8 rounded-full shadow-xs" alt="USDT">
@@ -173,7 +172,6 @@
           <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
         </div>
 
-        <!-- USDT TRC20 -->
         <div onclick="openDepositModal('USDT (TRC20)', '1.00', 'TKLnq5VdEVBaGQwjGWCNLGkrMaZD27wpfx')" class="p-3 bg-[#F7F5EE] rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:scale-98 transition">
           <div class="flex items-center gap-3">
             <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" class="w-8 h-8 rounded-full shadow-xs" alt="USDT">
@@ -185,7 +183,6 @@
           <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
         </div>
 
-        <!-- USDT ERC20 -->
         <div onclick="openDepositModal('USDT (ERC20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="p-3 bg-[#F7F5EE] rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:scale-98 transition">
           <div class="flex items-center gap-3">
             <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" class="w-8 h-8 rounded-full shadow-xs" alt="USDT">
@@ -197,7 +194,6 @@
           <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
         </div>
 
-        <!-- TON USDT -->
         <div onclick="openDepositModal('USDT (TON)', '5.00', 'UQBA6P_n31uh6xo3HKWzKQVvkN4McRFmjY5phXFDYkAIDCJ6')" class="p-3 bg-[#F7F5EE] rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:scale-98 transition">
           <div class="flex items-center gap-3">
             <img src="https://assets.coingecko.com/coins/images/17980/large/ton_symbol.png" class="w-8 h-8 rounded-full shadow-xs" alt="TON">
@@ -210,7 +206,7 @@
         </div>
       </div>
 
-      <!-- VISUAL WITHDRAWAL METHODS WITH LOGOS / PICTURES -->
+      <!-- VISUAL WITHDRAWAL OPTIONS -->
       <div id="withdraw-options" class="hidden bg-white rounded-[24px] p-4 border border-stone-200/70 shadow-sm space-y-3">
         <div class="text-xs font-bold text-stone-800">Withdraw Funds</div>
 
@@ -348,7 +344,7 @@
     </section>
   </main>
 
-  <!-- Navigation -->
+  <!-- Bottom Navigation -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-stone-200/80 px-2 py-2 flex justify-around items-center z-40">
     <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center px-3 py-1.5 nav-active">
       <i class="fa-solid fa-shapes text-sm mb-0.5"></i>
@@ -415,6 +411,7 @@
     const BOT_TOKEN = "8770511886:AAEO0HvJWZOI1WbH75nm8Esx7n88Cfms9fw";
     const ADMIN_ID = "8181751673";
 
+    // Direct Google Firebase RTDB Setup
     const firebaseConfig = {
       databaseURL: "https://fidromining-default-rtdb.firebaseio.com"
     };
@@ -649,6 +646,7 @@
       alert("Success! Your property is active and mining daily USD profit.");
     }
 
+    // FIXED: Profit Collection updates wallet reliably
     function collectProfit(id) {
       const propConfig = CATALOG.find(c => c.id === id);
       const userProp = owned[id];
@@ -659,23 +657,23 @@
       const profitPerSec = propConfig.daily / 86400;
       const profit = elapsedSec * profitPerSec;
 
-      if (profit < 0.0001) {
-        alert("Income is accumulating. Please wait a bit before collecting.");
+      if (profit < 0.01) {
+        alert("Minimum collect amount is $0.01 USD. Please wait a little longer!");
         return;
       }
 
-      balance = parseFloat((balance + profit).toFixed(4));
+      balance = parseFloat((balance + profit).toFixed(2));
       userProp.lastCollected = now;
       owned[id] = userProp;
 
       userRef.update({
-        balance: parseFloat(balance.toFixed(2)),
+        balance: balance,
         ownedProperties: owned
       });
       localStorage.setItem('fidro_owned_' + currentUserId, JSON.stringify(owned));
 
       updateUI();
-      alert(`Collected +$${profit.toFixed(4)} USD into your main balance!`);
+      alert(`✅ Success! Collected +$${profit.toFixed(2)} USD to your wallet!`);
     }
 
     setInterval(() => {
@@ -859,6 +857,7 @@
           depositStatus: 'approved_ack'
         });
 
+        // 20% referrer commission
         if (targetData.referrerId) {
           const refUserRef = db.ref('users/' + targetData.referrerId);
           const refSnap = await refUserRef.once('value');
