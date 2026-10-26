@@ -7,7 +7,7 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Google Firebase Official Web SDK -->
+  <!-- Google Firebase Web SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   <style>
@@ -29,7 +29,7 @@
 </head>
 <body class="select-none pb-28">
 
-  <!-- Top Sticky Header -->
+  <!-- Header -->
   <header class="bg-[#F7F5EE] px-4 pt-3 pb-2 sticky top-0 z-30 flex items-center justify-between">
     <div class="flex items-center gap-2.5">
       <div class="w-8 h-8 rounded-full bg-[#154D38] flex items-center justify-center text-white text-xs font-bold shadow-xs">
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <!-- Balance Pill Button -->
+    <!-- Balance Pill -->
     <div onclick="switchTab('wallet')" class="bg-white/90 border border-stone-200/80 rounded-full px-3 py-1 flex items-center gap-2 cursor-pointer shadow-sm active:scale-95 transition">
       <div class="text-right">
         <span class="text-[8px] text-stone-400 block leading-none">Your balance</span>
@@ -55,9 +55,7 @@
 
     <!-- ==================== TAB 1: PROPERTIES ==================== -->
     <section id="tab-properties" class="tab-page space-y-4">
-      <div class="space-y-4" id="properties-catalog-list">
-        <!-- Rendered dynamically via JavaScript to support one-time purchase & live income counters -->
-      </div>
+      <div class="space-y-4" id="properties-catalog-list"></div>
     </section>
 
     <!-- ==================== TAB 2: MY RESORT ==================== -->
@@ -80,7 +78,6 @@
 
     <!-- ==================== TAB 3: FRIENDS ==================== -->
     <section id="tab-friends" class="tab-page hidden space-y-3">
-      <!-- 20% + $0.01 Banner -->
       <div class="bg-gradient-to-r from-[#EBF3EE] to-[#FAF8F2] rounded-[24px] p-4 border border-[#D5E5DB] flex items-center justify-between shadow-sm">
         <div class="w-12 h-12 rounded-2xl bg-white border border-[#D5E5DB] flex items-center justify-center text-[#154D38] text-xl">
           <i class="fa-solid fa-gift"></i>
@@ -95,7 +92,6 @@
         </div>
       </div>
 
-      <!-- Ready to collect card -->
       <div class="bg-white rounded-[24px] p-4 border border-stone-200/70 shadow-sm flex items-center justify-between">
         <div>
           <span class="text-[10px] text-stone-400 block font-medium">Ready to collect</span>
@@ -108,7 +104,6 @@
         </button>
       </div>
 
-      <!-- Invitation link card -->
       <div class="bg-white rounded-[24px] p-4 border border-stone-200/70 shadow-sm space-y-2">
         <span class="text-xs font-bold text-stone-700 block">Your invitation link</span>
         <div class="flex gap-2">
@@ -119,7 +114,6 @@
         </div>
       </div>
 
-      <!-- Referral Stats -->
       <div class="grid grid-cols-3 gap-2">
         <div class="bg-white rounded-[22px] p-3 text-center border border-stone-200/70 shadow-sm">
           <div class="text-lg font-black text-stone-800 leading-tight" id="ref-total-friends">0</div>
@@ -136,15 +130,15 @@
       </div>
     </section>
 
-    <!-- ==================== TAB 4: WALLET ==================== -->
+    <!-- ==================== TAB 4: WALLET (WITH FULL VISUAL COIN LIST) ==================== -->
     <section id="tab-wallet" class="tab-page hidden space-y-3">
-      <!-- Wallet-Only Pending Banner -->
+      <!-- Wallet Status Banner -->
       <div id="wallet-status-banner" class="hidden p-3 rounded-2xl text-xs font-semibold flex items-center justify-between border shadow-sm">
         <span id="wallet-status-text">Status message</span>
         <button onclick="dismissWalletBanner()" class="text-stone-400 font-bold ml-2 text-sm">✕</button>
       </div>
 
-      <!-- Main Dark Green Card -->
+      <!-- Main Balance Card -->
       <div class="bg-gradient-to-br from-[#124230] via-[#154D38] to-[#0D3627] text-white rounded-[28px] p-5 shadow-md space-y-4">
         <div>
           <span class="text-[11px] text-emerald-200 block font-normal">Available balance</span>
@@ -154,13 +148,98 @@
         </div>
 
         <div class="grid grid-cols-2 gap-3 pt-1">
-          <button onclick="openDepositModal('USDT (BEP20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="bg-[#F6F4EE] text-[#154D38] py-2.5 rounded-xl text-xs font-bold shadow-sm active:scale-95 transition">
+          <button onclick="toggleSection('deposit-options')" class="bg-[#F6F4EE] text-[#154D38] py-2.5 rounded-xl text-xs font-bold shadow-sm active:scale-95 transition">
             + Deposit
           </button>
-          <button onclick="showWithdrawForm()" class="bg-[#1D5E46] text-white py-2.5 rounded-xl text-xs font-bold border border-emerald-400/20 shadow-sm active:scale-95 transition">
+          <button onclick="toggleSection('withdraw-options')" class="bg-[#1D5E46] text-white py-2.5 rounded-xl text-xs font-bold border border-emerald-400/20 shadow-sm active:scale-95 transition">
             <i class="fa-solid fa-arrow-up text-[10px] mr-1"></i> Withdraw
           </button>
         </div>
+      </div>
+
+      <!-- VISUAL DEPOSIT METHODS WITH LOGOS / PICTURES -->
+      <div id="deposit-options" class="bg-white rounded-[24px] p-4 border border-stone-200/70 shadow-sm space-y-2.5">
+        <div class="text-xs font-bold text-stone-800 mb-1">Select Deposit Method</div>
+        
+        <!-- USDT BEP20 -->
+        <div onclick="openDepositModal('USDT (BEP20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="p-3 bg-[#F7F5EE] rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:scale-98 transition">
+          <div class="flex items-center gap-3">
+            <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" class="w-8 h-8 rounded-full shadow-xs" alt="USDT">
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT <span class="text-[10px] bg-emerald-100 text-[#154D38] font-bold px-1.5 py-0.5 rounded">BEP20</span></div>
+              <div class="text-[10px] text-stone-400">BNB Smart Chain · Min $1.00</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
+        </div>
+
+        <!-- USDT TRC20 -->
+        <div onclick="openDepositModal('USDT (TRC20)', '1.00', 'TKLnq5VdEVBaGQwjGWCNLGkrMaZD27wpfx')" class="p-3 bg-[#F7F5EE] rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:scale-98 transition">
+          <div class="flex items-center gap-3">
+            <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" class="w-8 h-8 rounded-full shadow-xs" alt="USDT">
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT <span class="text-[10px] bg-red-100 text-red-700 font-bold px-1.5 py-0.5 rounded">TRC20</span></div>
+              <div class="text-[10px] text-stone-400">Tron Network · Min $1.00</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
+        </div>
+
+        <!-- USDT ERC20 -->
+        <div onclick="openDepositModal('USDT (ERC20)', '1.00', '0x85b26f4e0906a7ee1fefdc09cd4fac5f308ec2e7')" class="p-3 bg-[#F7F5EE] rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:scale-98 transition">
+          <div class="flex items-center gap-3">
+            <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" class="w-8 h-8 rounded-full shadow-xs" alt="USDT">
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT <span class="text-[10px] bg-blue-100 text-blue-700 font-bold px-1.5 py-0.5 rounded">ERC20</span></div>
+              <div class="text-[10px] text-stone-400">Ethereum Network · Min $1.00</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
+        </div>
+
+        <!-- TON USDT -->
+        <div onclick="openDepositModal('USDT (TON)', '5.00', 'UQBA6P_n31uh6xo3HKWzKQVvkN4McRFmjY5phXFDYkAIDCJ6')" class="p-3 bg-[#F7F5EE] rounded-2xl border border-stone-200 flex items-center justify-between cursor-pointer active:scale-98 transition">
+          <div class="flex items-center gap-3">
+            <img src="https://assets.coingecko.com/coins/images/17980/large/ton_symbol.png" class="w-8 h-8 rounded-full shadow-xs" alt="TON">
+            <div>
+              <div class="text-xs font-bold text-stone-800">USDT <span class="text-[10px] bg-sky-100 text-sky-700 font-bold px-1.5 py-0.5 rounded">TON</span></div>
+              <div class="text-[10px] text-stone-400">The Open Network · Min $5.00</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
+        </div>
+      </div>
+
+      <!-- VISUAL WITHDRAWAL METHODS WITH LOGOS / PICTURES -->
+      <div id="withdraw-options" class="hidden bg-white rounded-[24px] p-4 border border-stone-200/70 shadow-sm space-y-3">
+        <div class="text-xs font-bold text-stone-800">Withdraw Funds</div>
+
+        <div>
+          <label class="text-[10px] text-stone-400 font-bold uppercase block mb-1">Select Asset</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="selectWithdrawAsset('USDT (BEP20)', this)" class="wd-asset-btn p-2 bg-[#F7F5EE] rounded-xl border border-[#154D38] flex items-center gap-2 text-left active:scale-95 transition">
+              <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" class="w-6 h-6 rounded-full" alt="USDT">
+              <div>
+                <span class="text-xs font-bold block leading-none">BEP20</span>
+                <span class="text-[9px] text-stone-400">Min $1</span>
+              </div>
+            </button>
+            <button onclick="selectWithdrawAsset('USDT (TRC20)', this)" class="wd-asset-btn p-2 bg-[#F7F5EE] rounded-xl border border-stone-200 flex items-center gap-2 text-left active:scale-95 transition">
+              <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" class="w-6 h-6 rounded-full" alt="USDT">
+              <div>
+                <span class="text-xs font-bold block leading-none">TRC20</span>
+                <span class="text-[9px] text-stone-400">Min $1</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <input type="text" id="withdraw-address" placeholder="Destination Address" class="w-full bg-[#F7F5EE] border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
+        <input type="number" id="withdraw-amount" min="1" placeholder="Amount USD (Min 1.00 USD)" class="w-full bg-[#F7F5EE] border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
+        
+        <button onclick="submitWithdraw()" id="btn-submit-withdraw" class="w-full bg-[#154D38] text-white py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">
+          Confirm Withdrawal
+        </button>
       </div>
 
       <!-- History Access Cards -->
@@ -188,21 +267,6 @@
           </div>
         </div>
         <button onclick="openHistoryModal('withdrawals')" class="bg-[#154D38] text-white text-xs font-semibold px-4 py-1.5 rounded-xl active:scale-95 transition">Open</button>
-      </div>
-
-      <!-- Withdraw Form -->
-      <div id="box-withdraw" class="hidden bg-white rounded-[22px] p-4 border border-stone-200/70 shadow-sm space-y-3">
-        <div class="text-xs font-bold text-stone-800">Request Payout</div>
-        <select id="withdraw-asset" class="w-full bg-[#F7F5EE] border border-stone-200 rounded-xl p-2.5 text-xs outline-none">
-          <option value="USDT (BEP20)">USDT (BEP20)</option>
-          <option value="USDT (TRC20)">USDT (TRC20)</option>
-          <option value="USDT (ERC20)">USDT (ERC20)</option>
-        </select>
-        <input type="text" id="withdraw-address" placeholder="Destination Wallet Address" class="w-full bg-[#F7F5EE] border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
-        <input type="number" id="withdraw-amount" min="1" placeholder="Amount (Min 1.00 USD)" class="w-full bg-[#F7F5EE] border border-stone-200 rounded-xl p-2.5 text-xs outline-none" />
-        <button onclick="submitWithdraw()" id="btn-submit-withdraw" class="w-full bg-[#154D38] text-white py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">
-          Confirm Withdrawal
-        </button>
       </div>
     </section>
 
@@ -253,7 +317,7 @@
       </div>
     </section>
 
-    <!-- ==================== TAB 6: ADMIN ONLY ==================== -->
+    <!-- ==================== TAB 6: ADMIN ==================== -->
     <section id="tab-admin" class="tab-page hidden space-y-3">
       <div class="bg-white rounded-[24px] p-4 border border-rose-200 shadow-sm space-y-3">
         <div class="flex items-center gap-2 text-rose-700 font-bold text-sm">
@@ -284,7 +348,7 @@
     </section>
   </main>
 
-  <!-- ==================== BOTTOM NAVIGATION ==================== -->
+  <!-- Navigation -->
   <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-stone-200/80 px-2 py-2 flex justify-around items-center z-40">
     <button onclick="switchTab('properties')" id="btn-properties" class="nav-btn flex flex-col items-center px-3 py-1.5 nav-active">
       <i class="fa-solid fa-shapes text-sm mb-0.5"></i>
@@ -312,7 +376,7 @@
     </button>
   </nav>
 
-  <!-- Deposit Modal -->
+  <!-- Deposit Proof Modal -->
   <div id="deposit-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
     <div class="bg-white rounded-[28px] p-5 w-full max-w-sm text-center shadow-2xl space-y-3">
       <h3 class="font-bold text-base text-stone-800" id="modal-coin-title">Deposit</h3>
@@ -351,7 +415,6 @@
     const BOT_TOKEN = "8770511886:AAEO0HvJWZOI1WbH75nm8Esx7n88Cfms9fw";
     const ADMIN_ID = "8181751673";
 
-    // Direct Firebase Setup
     const firebaseConfig = {
       databaseURL: "https://fidromining-default-rtdb.firebaseio.com"
     };
@@ -380,7 +443,6 @@
       document.getElementById('btn-admin').classList.remove('hidden');
     }
 
-    // Property catalog configuration ($0.50 to $350.00)
     const CATALOG = [
       { id: 'bungalow', name: 'Beach Bungalow', tag: 'Samui · Beachfront', price: 0.50, daily: 0.10, monthly: 3.00, img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=700&auto=format&fit=crop&q=80' },
       { id: 'cafe', name: 'Seaside Café', tag: 'Phuket · Coastal', price: 3.00, daily: 0.65, monthly: 19.50, img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=700&auto=format&fit=crop&q=80' },
@@ -397,16 +459,15 @@
     let referralEarnings = 0.00;
     let friendsCount = 0;
     let friendsDeposits = 0.00;
-    let owned = {}; // Key-value map: { bungalow: { purchasedAt, lastCollected } }
-    let currentCoin = '';
+    let owned = {};
+    let currentCoin = 'USDT (BEP20)';
     let currentMin = 1.00;
+    let selectedWithdrawCoin = 'USDT (BEP20)';
 
-    // Load owned state
     try {
       owned = JSON.parse(localStorage.getItem('fidro_owned_' + currentUserId) || '{}');
     } catch(e) { owned = {}; }
 
-    // Firebase Data Listener
     const userRef = db.ref('users/' + currentUserId);
     userRef.on('value', (snap) => {
       const data = snap.val();
@@ -422,7 +483,6 @@
           localStorage.setItem('fidro_owned_' + currentUserId, JSON.stringify(owned));
         }
 
-        // Wallet-only contextual banners (No more false withdrawal alerts on deposit)
         const banner = document.getElementById('wallet-status-banner');
         const text = document.getElementById('wallet-status-text');
 
@@ -487,11 +547,21 @@
       document.getElementById('btn-' + tabId).classList.remove('nav-inactive');
     }
 
-    function showWithdrawForm() {
-      document.getElementById('box-withdraw').classList.toggle('hidden');
+    function toggleSection(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
     }
 
-    // Dynamic catalog renderer: Shows "Open property" or live "Collect Profit" ticker
+    function selectWithdrawAsset(coin, btn) {
+      selectedWithdrawCoin = coin;
+      document.querySelectorAll('.wd-asset-btn').forEach(b => {
+        b.classList.remove('border-[#154D38]');
+        b.classList.add('border-stone-200');
+      });
+      btn.classList.add('border-[#154D38]');
+      btn.classList.remove('border-stone-200');
+    }
+
     function renderCatalog() {
       const container = document.getElementById('properties-catalog-list');
       if (!container) return;
@@ -553,7 +623,6 @@
       });
     }
 
-    // Purchase one time
     function buyProperty(id, price) {
       if (balance < price) {
         alert("Insufficient balance! Please deposit in wallet.");
@@ -580,7 +649,6 @@
       alert("Success! Your property is active and mining daily USD profit.");
     }
 
-    // Collect accrued profit from property
     function collectProfit(id) {
       const propConfig = CATALOG.find(c => c.id === id);
       const userProp = owned[id];
@@ -610,7 +678,6 @@
       alert(`Collected +$${profit.toFixed(4)} USD into your main balance!`);
     }
 
-    // Live real-time profit ticking loop
     setInterval(() => {
       Object.keys(owned).forEach(id => {
         const ticker = document.getElementById(`ticker-${id}`);
@@ -647,13 +714,11 @@
       document.getElementById('profile-total-deposited').innerText = totalDeposited.toFixed(2);
       document.getElementById('profile-total-withdrawn').innerText = totalWithdrawn.toFixed(2);
 
-      // Friends
       document.getElementById('friends-ready-collect').innerText = referralEarnings.toFixed(2);
       document.getElementById('ref-total-friends').innerText = friendsCount;
       document.getElementById('ref-friends-dep').innerText = friendsDeposits.toFixed(2);
       document.getElementById('ref-total-earned').innerText = (referralEarnings + (friendsCount * 0.01)).toFixed(2);
 
-      // My Resort stats
       const ownedCount = Object.keys(owned).length;
       document.getElementById('resort-count').innerText = ownedCount;
       let totalDaily = 0;
@@ -686,7 +751,6 @@
       alert("Address copied!");
     }
 
-    // Submit Deposit
     async function submitDepositProof() {
       const amount = parseFloat(document.getElementById('deposit-tx-amount').value);
       const txid = document.getElementById('deposit-txid').value.trim();
@@ -698,7 +762,6 @@
       btn.innerText = "Submitting...";
       btn.disabled = true;
 
-      // Register deposit in Firebase
       userRef.update({
         depositStatus: 'pending',
         pendingDeposit: amount
@@ -728,11 +791,9 @@
       }, 400);
     }
 
-    // Submit Withdrawal
     async function submitWithdraw() {
       const amount = parseFloat(document.getElementById('withdraw-amount').value);
       const addr = document.getElementById('withdraw-address').value.trim();
-      const coin = document.getElementById('withdraw-asset').value;
 
       if (!addr) return alert("Please enter payout address.");
       if (isNaN(amount) || amount < 1.00) return alert("Minimum withdrawal is 1.00 USD.");
@@ -750,14 +811,14 @@
       });
 
       db.ref(`users/${currentUserId}/history/withdrawals`).push({
-        coin: coin,
+        coin: selectedWithdrawCoin,
         amount: amount,
         address: addr,
         status: 'pending',
         date: new Date().toLocaleDateString()
       });
 
-      const text = `🚨 <b>NEW WITHDRAWAL REQUEST</b>\n\n👤 <b>User:</b> @${currentUserHandle}\n🆔 <b>User ID:</b> <code>${currentUserId}</code>\n💳 <b>Asset:</b> ${coin}\n💵 <b>Amount:</b> $${amount.toFixed(2)} USD\n📬 <b>Destination:</b>\n<code>${addr}</code>`;
+      const text = `🚨 <b>NEW WITHDRAWAL REQUEST</b>\n\n👤 <b>User:</b> @${currentUserHandle}\n🆔 <b>User ID:</b> <code>${currentUserId}</code>\n💳 <b>Asset:</b> ${selectedWithdrawCoin}\n💵 <b>Amount:</b> $${amount.toFixed(2)} USD\n📬 <b>Destination:</b>\n<code>${addr}</code>`;
 
       fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
@@ -774,7 +835,6 @@
       }, 400);
     }
 
-    // Secret Admin Operations (Credits deposit & triggers 20% referrer bonus)
     async function adminAction(actionType) {
       if (String(currentUserId) !== String(ADMIN_ID)) return alert("Access denied.");
 
@@ -799,7 +859,6 @@
           depositStatus: 'approved_ack'
         });
 
-        // 20% commission to referrer
         if (targetData.referrerId) {
           const refUserRef = db.ref('users/' + targetData.referrerId);
           const refSnap = await refUserRef.once('value');
@@ -840,7 +899,6 @@
       }
     }
 
-    // History Modal
     async function openHistoryModal(type) {
       document.getElementById('history-modal-title').innerText = type === 'deposits' ? 'Deposit History' : 'Withdrawal History';
       const container = document.getElementById('history-items');
